@@ -14,9 +14,9 @@ require_once "verifyotpemail_jn.php";
     <div class="container-fluid" style="max-width: 1200px;">
         <div class="row align-items-center justify-content-center">
 
-            <div class="col-md-5 text-center mb-5 mb-md-0 d-flex flex-column align-items-center justify-content-center">
-                <div style="width: 130px; height: 130px; background-color: #121416; border-radius: 24px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 16px rgba(18, 20, 22, 0.18); margin-bottom: 20px;">
-                        <img src="Tigris_Logo_NoText.png" alt="Tigris Capital Logo" style="width: 100%; height: 100%; object-fit: cover; border-radius: 24px;">
+                <div class="col-md-5 text-center mb-5 mb-md-0 d-flex flex-column align-items-center justify-content-center">
+                <div style="width:200px; height:200px; background-color: #121416; border-radius: 24px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 16px rgba(18, 20, 22, 0.18); margin-bottom: 20px; overflow:hidden;">
+                    <img src="Tigris_Logo_NoText.png" alt="Tigris Capital Logo" style="width: 100%; height: 100%; object-fit: cover; border-radius: 24px;">
                 </div>
                 <h1 class="fw-bold m-0" style="font-size: 3rem; color: #1f2937; letter-spacing: -1px;">
                     <span style="color: #a82329;">TIGRIS</span> Capital

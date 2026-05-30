@@ -19,10 +19,10 @@ $pendingLoans = [
 </head>
 <body style="margin:0; background:#f4f5f7; color:#1f2937; font-family: Arial, Helvetica, sans-serif; overflow-x:hidden;">
     <div style="min-height:100vh; display:flex; background:#f4f5f7;">
-        <aside style="width:190px; background:#121416; border-right:1px solid rgba(226,232,240,0.08); box-shadow: 0 0 0 1px rgba(0,0,0,0.08); display:flex; flex-direction:column; justify-content:space-between;">
+        <aside style="width:240px; background:#121416; border-right:1px solid rgba(226,232,240,0.08); box-shadow: 0 0 0 1px rgba(0,0,0,0.08); display:flex; flex-direction:column; justify-content:space-between;">
             <div>
-                <div style="height:69px; display:flex; align-items:center; gap:12px; padding:0 16px; border-bottom:1px solid rgba(226,232,240,0.08);">
-                    <div style="width:30px; height:30px; border-radius:6px; background:#121416; display:flex; align-items:center; justify-content:center; color:#fff; flex:0 0 auto; box-shadow:0 0 0 1px rgba(255,255,255,0.04); overflow:hidden;">
+                    <div style="height:69px; display:flex; align-items:center; gap:12px; padding:0 18px; border-bottom:1px solid rgba(226,232,240,0.08);">
+                    <div style="width:36px; height:36px; border-radius:6px; background:#121416; display:flex; align-items:center; justify-content:center; color:#fff; flex:0 0 auto; box-shadow:0 0 0 1px rgba(255,255,255,0.04); overflow:hidden;">
                         <img src="Tigris_Logo_NoText.png" alt="Tigris Capital Logo" style="width:100%; height:100%; object-fit:cover;">
                     </div>
                     <div style="line-height:1.05;">
@@ -31,33 +31,33 @@ $pendingLoans = [
                     </div>
                 </div>
 
-                <nav style="padding:14px 10px 0 10px;">
-                    <a href="#" style="display:flex; align-items:center; gap:12px; height:36px; border-radius:6px; padding:0 12px; margin-bottom:8px; background:rgba(168,35,41,0.16); color:#ffffff; text-decoration:none; font-size:13px; font-weight:600; border:1px solid rgba(168,35,41,0.28); box-shadow:inset 0 1px 0 rgba(255,255,255,0.03);">
-                        <span style="width:16px; height:16px; border-radius:4px; border:1px solid currentColor; display:inline-flex; align-items:center; justify-content:center; font-size:9px; line-height:1; font-weight:700;">O</span>
+                <nav style="padding:18px 12px 0 12px;">
+                    <a href="#" style="display:flex; align-items:center; gap:14px; height:48px; border-radius:8px; padding:0 16px; margin-bottom:10px; background:rgba(168,35,41,0.16); color:#ffffff; text-decoration:none; font-size:14px; font-weight:600; border:1px solid rgba(168,35,41,0.28); box-shadow:inset 0 1px 0 rgba(255,255,255,0.03);">
+                        <span style="width:22px; height:22px; border-radius:6px; border:1px solid currentColor; display:inline-flex; align-items:center; justify-content:center; font-size:11px; line-height:1; font-weight:700;">O</span>
                         Overview
                     </a>
-                    <a href="#" style="display:flex; align-items:center; gap:12px; height:36px; border-radius:6px; padding:0 12px; margin-bottom:8px; color:#cbd5e1; text-decoration:none; font-size:13px; font-weight:500;">
-                        <span style="width:16px; height:16px; border-radius:50%; border:1px solid currentColor; display:inline-flex; align-items:center; justify-content:center; font-size:9px; line-height:1; font-weight:700;">M</span>
+                    <a href="#" style="display:flex; align-items:center; gap:14px; height:48px; border-radius:8px; padding:0 16px; margin-bottom:10px; color:#cbd5e1; text-decoration:none; font-size:14px; font-weight:500;">
+                        <span style="width:22px; height:22px; border-radius:50%; border:1px solid currentColor; display:inline-flex; align-items:center; justify-content:center; font-size:11px; line-height:1; font-weight:700;">M</span>
                         Members
                     </a>
-                    <a href="#" style="display:flex; align-items:center; gap:12px; height:36px; border-radius:6px; padding:0 12px; margin-bottom:8px; color:#cbd5e1; text-decoration:none; font-size:13px; font-weight:500;">
-                        <span style="width:16px; height:16px; border-radius:4px; border:1px solid currentColor; display:inline-flex; align-items:center; justify-content:center; font-size:9px; line-height:1; font-weight:700;">L</span>
+                    <a href="#" style="display:flex; align-items:center; gap:14px; height:48px; border-radius:8px; padding:0 16px; margin-bottom:10px; color:#cbd5e1; text-decoration:none; font-size:14px; font-weight:500;">
+                        <span style="width:22px; height:22px; border-radius:6px; border:1px solid currentColor; display:inline-flex; align-items:center; justify-content:center; font-size:11px; line-height:1; font-weight:700;">L</span>
                         Loans
                     </a>
-                    <a href="#" style="display:flex; align-items:center; gap:12px; height:36px; border-radius:6px; padding:0 12px; margin-bottom:8px; color:#cbd5e1; text-decoration:none; font-size:13px; font-weight:500;">
-                        <span style="width:16px; height:16px; border-radius:4px; border:1px solid currentColor; display:inline-flex; align-items:center; justify-content:center; font-size:9px; line-height:1; font-weight:700;">P</span>
+                    <a href="#" style="display:flex; align-items:center; gap:14px; height:48px; border-radius:8px; padding:0 16px; margin-bottom:10px; color:#cbd5e1; text-decoration:none; font-size:14px; font-weight:500;">
+                        <span style="width:22px; height:22px; border-radius:6px; border:1px solid currentColor; display:inline-flex; align-items:center; justify-content:center; font-size:11px; line-height:1; font-weight:700;">P</span>
                         Payments
                     </a>
-                    <a href="#" style="display:flex; align-items:center; gap:12px; height:36px; border-radius:6px; padding:0 12px; color:#cbd5e1; text-decoration:none; font-size:13px; font-weight:500;">
-                        <span style="width:16px; height:16px; border-radius:4px; border:1px solid currentColor; display:inline-flex; align-items:center; justify-content:center; font-size:8px; line-height:1; font-weight:700;">LT</span>
+                    <a href="#" style="display:flex; align-items:center; gap:14px; height:48px; border-radius:8px; padding:0 16px; color:#cbd5e1; text-decoration:none; font-size:14px; font-weight:500;">
+                        <span style="width:22px; height:22px; border-radius:6px; border:1px solid currentColor; display:inline-flex; align-items:center; justify-content:center; font-size:10px; line-height:1; font-weight:700;">LT</span>
                         Loan Types
                     </a>
                 </nav>
             </div>
 
-            <div style="padding:18px 12px; border-top:1px solid rgba(226,232,240,0.08);">
-                <a href="Loan_login_jn.php" style="display:flex; align-items:center; gap:10px; color:#e2e8f0; text-decoration:none; font-size:13px; font-weight:600; padding:10px 10px; border-radius:8px; background:rgba(255,255,255,0.02); border:1px solid rgba(226,232,240,0.08);">
-                    <span style="font-size:16px; line-height:1; font-weight:700;">↪</span>
+            <div style="padding:20px 14px; border-top:1px solid rgba(226,232,240,0.08);">
+                <a href="Loan_login_jn.php" style="display:flex; align-items:center; gap:12px; color:#e2e8f0; text-decoration:none; font-size:15px; font-weight:700; padding:12px 14px; border-radius:8px; background:rgba(255,255,255,0.02); border:1px solid rgba(226,232,240,0.08);">
+                    <span style="font-size:18px; line-height:1; font-weight:700;">↪</span>
                     Logout
                 </a>
             </div>
@@ -146,28 +146,28 @@ $pendingLoans = [
                 </div>
 
 
-                <div class="row g-3" style="margin-top:24px; margin-left:0; margin-right:0;">
-                    <div class="col-12 col-lg-4" style="padding-left:0; padding-right:0;">
+                <div class="row g-3" style="margin:24px 0 0 0;">
+                    <div class="col-md-6" style="padding-left:8px; padding-right:8px;">
                         <div style="background:#fff; border:1px solid #e5e7eb; border-radius:6px; box-shadow:0 1px 4px rgba(16,24,40,.04); min-height:176px; padding:16px;">
                             <div style="font-size:14px; font-weight:700; color:#1f2937; margin-bottom:14px;">Quick Actions</div>
                             <div style="display:flex; flex-direction:column; gap:10px;">
-                                <div style="height:38px; border:1px solid #d1d5db; border-radius:6px; display:flex; align-items:center; gap:10px; padding:0 12px; color:#374151; font-size:13px; font-weight:600; background:#fff;">
+                                <a href="loans_list_jn.php" style="display:flex; height:38px; align-items:center; gap:10px; padding:0 12px; color:#374151; font-size:13px; font-weight:600; background:#fff; border:1px solid #d1d5db; border-radius:6px; text-decoration:none;">
                                     <span style="width:16px; height:16px; border-radius:3px; border:1px solid #a82329; display:inline-flex; align-items:center; justify-content:center; font-size:9px; line-height:1; color:#a82329; font-weight:700;">L</span>
                                     View All Loans
-                                </div>
-                                <div style="height:38px; border:1px solid #d1d5db; border-radius:6px; display:flex; align-items:center; gap:10px; padding:0 12px; color:#374151; font-size:13px; font-weight:600; background:#fff;">
+                                </a>
+                                <a href="Naval_FinalsActivity3_Display.php" style="display:flex; height:38px; align-items:center; gap:10px; padding:0 12px; color:#374151; font-size:13px; font-weight:600; background:#fff; border:1px solid #d1d5db; border-radius:6px; text-decoration:none;">
                                     <span style="width:16px; height:16px; border-radius:50%; border:1px solid #a82329; display:inline-flex; align-items:center; justify-content:center; font-size:9px; line-height:1; color:#a82329; font-weight:700;">M</span>
                                     Manage Members
-                                </div>
-                                <div style="height:38px; border:1px solid #d1d5db; border-radius:6px; display:flex; align-items:center; gap:10px; padding:0 12px; color:#374151; font-size:13px; font-weight:600; background:#fff;">
+                                </a>
+                                <a href="reports_jn.php" style="display:flex; height:38px; align-items:center; gap:10px; padding:0 12px; color:#374151; font-size:13px; font-weight:600; background:#fff; border:1px solid #d1d5db; border-radius:6px; text-decoration:none;">
                                     <span style="width:16px; height:16px; border-radius:3px; border:1px solid #a82329; display:inline-flex; align-items:center; justify-content:center; font-size:9px; line-height:1; color:#a82329; font-weight:700;">R</span>
                                     View Reports
-                                </div>
+                                </a>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-12 col-lg-4" style="padding-left:0; padding-right:0;">
+                    <div class="col-md-6" style="padding-left:8px; padding-right:8px;">
                         <div style="background:#fff; border:1px solid #e5e7eb; border-radius:6px; box-shadow:0 1px 4px rgba(16,24,40,.04); min-height:176px; padding:16px;">
                             <div style="font-size:14px; font-weight:700; color:#1f2937; margin-bottom:18px;">This Week&apos;s Activity</div>
                             <div style="margin-bottom:16px;">
@@ -185,29 +185,6 @@ $pendingLoans = [
                         </div>
                     </div>
 
-                    <div class="col-12 col-lg-4" style="padding-left:0; padding-right:0;">
-                        <div style="background:#fff; border:1px solid #e5e7eb; border-radius:6px; box-shadow:0 1px 4px rgba(16,24,40,.04); min-height:176px; padding:16px;">
-                            <div style="font-size:14px; font-weight:700; color:#1f2937; margin-bottom:18px;">Performance Metrics</div>
-                            <div style="margin-bottom:16px;">
-                                <div style="display:flex; justify-content:space-between; font-size:13px; color:#6b7280; margin-bottom:8px;"><span>Approval Rate</span><span>85%</span></div>
-                                <div style="height:6px; background:#e5e7eb; border-radius:999px; overflow:hidden;"><div style="width:85%; height:100%; background:#a82329; border-radius:999px;"></div></div>
-                            </div>
-                            <div style="margin-bottom:16px; display:flex; justify-content:space-between; align-items:flex-end; gap:16px;">
-                                <div>
-                                    <div style="font-size:13px; color:#6b7280; margin-bottom:6px;">Avg. Processing Time</div>
-                                    <div style="font-size:13px; color:#a82329; margin-bottom:4px;">↓ 0.5 days faster than last month</div>
-                                </div>
-                                <div style="font-size:13px; color:#374151; white-space:nowrap;">2.3 days</div>
-                            </div>
-                            <div style="display:flex; justify-content:space-between; align-items:flex-end; gap:16px;">
-                                <div>
-                                    <div style="font-size:13px; color:#6b7280; margin-bottom:6px;">Total Processed</div>
-                                    <div style="font-size:13px; color:#a82329; margin-bottom:4px;">↑ 18% this month</div>
-                                </div>
-                                <div style="font-size:13px; color:#374151; white-space:nowrap;">127 loans</div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </section>
         </main>

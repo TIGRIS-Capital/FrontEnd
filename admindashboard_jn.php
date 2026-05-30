@@ -10,9 +10,9 @@
     <!-- Navbar for name -->
     <nav class="navbar navbar-expand-lg shadow" style="background:#121416; border-bottom:1px solid rgba(226,232,240,0.08);">
         <div class="container-fluid px-3">
-            <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="#" style="color:#ffffff;">
-                <img src="Tigris_Logo_NoText.png" alt="Tigris Capital Logo" width="34" height="34" style="border-radius:8px; object-fit:cover;">
-                <span><span style="color:#a82329;">TIGRIS</span> Capital</span>
+            <a class="navbar-brand fw-bold d-flex align-items-center gap-3" href="#" style="color:#ffffff; padding-left:6px;">
+                <img src="Tigris_Logo_NoText.png" alt="Tigris Capital Logo" width="44" height="44" style="border-radius:10px; object-fit:cover;">
+                <span style="font-size:1.05rem;"><span style="color:#a82329; font-weight:700;">TIGRIS</span> Capital</span>
             </a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">

@@ -60,9 +60,9 @@ if (isset($_POST['sub_jnsa'])) {
         <div class="row align-items-center justify-content-center">
             
         <!-- Logo and Title Column -->
-            <div class="col-md-5 text-center mb-5 mb-md-0 d-flex flex-column align-items-center justify-content-center">
-                <div style="width:170px; height:170px; background-color:#121416; border-radius:28px; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 22px rgba(18,20,22,0.18); margin-bottom:24px; overflow:hidden;">
-                        <img src="Tigris_Logo_NoText.png" alt="Tigris Capital Logo" style="width:100%; height:100%; object-fit:cover; border-radius:inherit;">
+                <div class="col-md-5 text-center mb-5 mb-md-0 d-flex flex-column align-items-center justify-content-center">
+                <div style="width:200px; height:200px; background-color:#121416; border-radius:28px; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 22px rgba(18,20,22,0.18); margin-bottom:24px; overflow:hidden;">
+                    <img src="Tigris_Logo_NoText.png" alt="Tigris Capital Logo" style="width:100%; height:100%; object-fit:cover; border-radius:inherit;">
                 </div>
                 <h1 class="fw-bold m-0" style="font-size:3.8rem; color:#1f2937; letter-spacing:-1px;">
                     <span style="color:#a82329; font-weight:600;">TIGRIS</span> Capital
