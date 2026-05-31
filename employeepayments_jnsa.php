@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// Normalize the employee session and stop unauthorized access early.
 if (!isset($_SESSION['member_id_jnsa']) && isset($_SESSION['member_id'])) {
 	$_SESSION['member_id_jnsa'] = (int) $_SESSION['member_id'];
 }
@@ -21,7 +20,7 @@ $loan_types_nav_active_jnsa = ($current_page_jnsa === 'employeeloantypes_jnsa.ph
 
 require_once "Naval_FinalsActivity3_DB.php";
 
-// Shared scalar helper for the payment dashboard.
+// scalar helper for the payment dashboard.
 function dashboard_scalar(mysqli $conn, string $sql, $default = 0) {
 	$result = $conn->query($sql);
 	if (!$result) {
@@ -31,7 +30,7 @@ function dashboard_scalar(mysqli $conn, string $sql, $default = 0) {
 	return $row[0] ?? $default;
 }
 
-// Format values as currency for display.
+// Format currency for display.
 function dashboard_money($value) {
 	return '$' . number_format((float) $value, 2);
 }
@@ -65,19 +64,19 @@ if ($q !== '') {
 	}
 }
 
-// Fetch joined payment, loan, and member rows for the table.
+// joined payment, loan, and member rows
 $where_sql = '';
 if (!empty($where)) {
 	$where_sql = ' WHERE ' . implode(' AND ', $where);
 }
 
-// Build the payment listing query with the active search filter.
+// payment listing query
 $sql_payments = "SELECT p.payment_id_jnsa, m.member_name_jnsa, l.loan_id_jnsa, p.payment_amount_jnsa, p.payment_date_jnsa
 	FROM payment_jnsa p
 	INNER JOIN loan_jnsa l ON l.loan_id_jnsa = p.loan_id_jnsa
 	INNER JOIN loan_member_jnsa m ON m.member_id_jnsa = l.borrower_id_jnsa" . $where_sql . " ORDER BY $order_by $dir, p.payment_id_jnsa DESC";
 
-// Summary figures displayed in the KPI cards.
+// Summary figures 
 $payments_query_jnsa = $conn->query($sql_payments);
 if ($payments_query_jnsa && $payments_query_jnsa->num_rows > 0) {
 	while ($payment_row_jnsa = $payments_query_jnsa->fetch_assoc()) {
@@ -110,8 +109,9 @@ $latest_payment_date_jnsa = dashboard_scalar($conn, "SELECT MAX(payment_date_jns
 						<div style="font-size:16px; font-weight:700; color:#e2e8f0;">Employee Portal</div>
 						<div style="font-size:11px; color:#94a3b8; margin-top:2px;">Loan Officer</div>
 					</div>
+				</div>
 
-                <!-- navbar to other page -->
+				<!-- navbar to other page -->
 				<nav style="padding:18px 12px 0 12px;">
 					<a href="employeedashboard_jn.php" style="display:flex; align-items:center; gap:14px; height:48px; border-radius:8px; padding:0 16px; margin-bottom:10px; color:#cbd5e1; text-decoration:none; font-size:14px; font-weight:500;">Overview</a>
 					<a href="employeeloans_jnsa.php" style="display:flex; align-items:center; gap:14px; height:48px; border-radius:8px; padding:0 16px; margin-bottom:10px; color:#cbd5e1; text-decoration:none; font-size:14px; font-weight:500;">Loans</a>

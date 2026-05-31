@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Normalize the employee session and gate the page to employees only.
+// Normalize the employee session and gate 
 if (!isset($_SESSION['member_id_jnsa']) && isset($_SESSION['member_id'])) {
 	$_SESSION['member_id_jnsa'] = (int) $_SESSION['member_id'];
 }
@@ -20,7 +20,7 @@ $loan_types_nav_active_jnsa = ($current_page_jnsa === 'employeeloantypes_jnsa.ph
 
 require_once "Naval_FinalsActivity3_DB.php";
 
-// Shared scalar helper for the loan-type summary.
+// scalar helper for the loan-type summary
 function dashboard_scalar(mysqli $conn, string $sql, $default = 0) {
 	$result = $conn->query($sql);
 	if (!$result) {
@@ -32,40 +32,90 @@ function dashboard_scalar(mysqli $conn, string $sql, $default = 0) {
 
 $success_message_jnsa = '';
 $error_message_jnsa = '';
+$edit_loan_type_jnsa = null;
 
 if (isset($_SESSION['loan_type_success_jnsa'])) {
-	// Retrieve flash messages from the previous request.
 	$success_message_jnsa = $_SESSION['loan_type_success_jnsa'];
 	unset($_SESSION['loan_type_success_jnsa']);
 } elseif (isset($_GET['success']) && $_GET['success'] == '1') {
 	$success_message_jnsa = 'Loan type created successfully.';
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_loan_type_jnsa'])) {
-	// Insert a new loan type when the form is submitted.
+if (isset($_GET['edit_jnsa'])) {
+	$edit_loan_type_id_jnsa = (int) $_GET['edit_jnsa'];
+	if ($edit_loan_type_id_jnsa > 0) {
+		$edit_stmt_jnsa = $conn->prepare("SELECT loan_type_id_jnsa, loan_type_name_jnsa, description_jnsa FROM loan_type_jnsa WHERE loan_type_id_jnsa = ? LIMIT 1");
+		if ($edit_stmt_jnsa) {
+			$edit_stmt_jnsa->bind_param('i', $edit_loan_type_id_jnsa);
+			$edit_stmt_jnsa->execute();
+			$edit_result_jnsa = $edit_stmt_jnsa->get_result();
+			$edit_loan_type_jnsa = $edit_result_jnsa ? $edit_result_jnsa->fetch_assoc() : null;
+			$edit_stmt_jnsa->close();
+		}
+		if (!$edit_loan_type_jnsa) {
+			$error_message_jnsa = 'Unable to find the selected loan type.';
+		}
+	}
+}
+
+if (isset($_GET['delete_jnsa'])) {
+	$delete_loan_type_id_jnsa = (int) $_GET['delete_jnsa'];
+	if ($delete_loan_type_id_jnsa > 0) {
+		$delete_stmt_jnsa = $conn->prepare("DELETE FROM loan_type_jnsa WHERE loan_type_id_jnsa = ?");
+		if ($delete_stmt_jnsa) {
+			$delete_stmt_jnsa->bind_param('i', $delete_loan_type_id_jnsa);
+			if ($delete_stmt_jnsa->execute()) {
+				$_SESSION['loan_type_success_jnsa'] = 'Loan type deleted successfully.';
+				header('Location: employeeloantypes_jnsa.php');
+				exit();
+			}
+			$error_message_jnsa = 'Unable to delete the loan type right now.';
+			$delete_stmt_jnsa->close();
+		}
+	}
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_loan_type_jnsa'])) {
+	$loan_type_id_jnsa = isset($_POST['loan_type_id_jnsa']) ? (int) $_POST['loan_type_id_jnsa'] : 0;
 	$loan_type_name_jnsa = trim((string) ($_POST['loan_type_name_jnsa'] ?? ''));
 	$description_jnsa = trim((string) ($_POST['description_jnsa'] ?? ''));
 
 	if ($loan_type_name_jnsa === '') {
 		$error_message_jnsa = 'Please enter a loan type name.';
 	} else {
-		$insert_stmt_jnsa = $conn->prepare("INSERT INTO loan_type_jnsa (loan_type_name_jnsa, description_jnsa) VALUES (?, ?)");
-		if (!$insert_stmt_jnsa) {
-			$error_message_jnsa = 'Unable to prepare the loan type insert.';
-		} else {
-			$insert_stmt_jnsa->bind_param('ss', $loan_type_name_jnsa, $description_jnsa);
-			if ($insert_stmt_jnsa->execute()) {
-				$_SESSION['loan_type_success_jnsa'] = 'Loan type added successfully.';
-				header('Location: employeeloantypes_jnsa.php?success=1');
-				exit();
+		if ($loan_type_id_jnsa > 0) {
+			$update_stmt_jnsa = $conn->prepare("UPDATE loan_type_jnsa SET loan_type_name_jnsa = ?, description_jnsa = ? WHERE loan_type_id_jnsa = ?");
+			if (!$update_stmt_jnsa) {
+				$error_message_jnsa = 'Unable to prepare the loan type update.';
+			} else {
+				$update_stmt_jnsa->bind_param('ssi', $loan_type_name_jnsa, $description_jnsa, $loan_type_id_jnsa);
+				if ($update_stmt_jnsa->execute()) {
+					$_SESSION['loan_type_success_jnsa'] = 'Loan type updated successfully.';
+					header('Location: employeeloantypes_jnsa.php');
+					exit();
+				}
+				$error_message_jnsa = 'Unable to update the loan type right now. Please try again.';
+				$update_stmt_jnsa->close();
 			}
-			$error_message_jnsa = 'Unable to add the loan type right now. Please try again.';
-			$insert_stmt_jnsa->close();
+		} else {
+			$insert_stmt_jnsa = $conn->prepare("INSERT INTO loan_type_jnsa (loan_type_name_jnsa, description_jnsa) VALUES (?, ?)");
+			if (!$insert_stmt_jnsa) {
+				$error_message_jnsa = 'Unable to prepare the loan type insert.';
+			} else {
+				$insert_stmt_jnsa->bind_param('ss', $loan_type_name_jnsa, $description_jnsa);
+				if ($insert_stmt_jnsa->execute()) {
+					$_SESSION['loan_type_success_jnsa'] = 'Loan type added successfully.';
+					header('Location: employeeloantypes_jnsa.php?success=1');
+					exit();
+				}
+				$error_message_jnsa = 'Unable to add the loan type right now. Please try again.';
+				$insert_stmt_jnsa->close();
+			}
 		}
 	}
 }
 
-// Load the current loan type catalog and the count used by the card.
+// Load current loan type catalog and count
 $loan_types_jnsa = [];
 $loan_types_query_jnsa = $conn->query("SELECT loan_type_id_jnsa, loan_type_name_jnsa, description_jnsa FROM loan_type_jnsa ORDER BY loan_type_name_jnsa ASC");
 if ($loan_types_query_jnsa && $loan_types_query_jnsa->num_rows > 0) {
@@ -156,19 +206,23 @@ $loan_types_count_jnsa = (int) dashboard_scalar($conn, "SELECT COUNT(*) FROM loa
 				<!-- Form Card -->
 				<div style="max-width:860px; margin-bottom:24px;">
 					<div style="background:#ffffff; border:1px solid #e5e7eb; border-radius:12px; box-shadow:0 10px 30px rgba(15,23,42,0.08); padding:22px;">
-						<div style="font-size:16px; font-weight:700; color:#212529; margin-bottom:16px;">Add New Loan Type</div>
+							<div style="font-size:16px; font-weight:700; color:#212529; margin-bottom:16px;"><?php echo $edit_loan_type_jnsa ? 'Edit Loan Type' : 'Add New Loan Type'; ?></div>
 						<form method="post" action="employeeloantypes_jnsa.php">
+								<input type="hidden" name="loan_type_id_jnsa" value="<?php echo (int) ($edit_loan_type_jnsa['loan_type_id_jnsa'] ?? 0); ?>">
 							<div class="row g-3">
 								<div class="col-12 col-md-5">
 									<label for="loan_type_name_jnsa" style="display:block; margin-bottom:8px; color:#212529; font-size:13px; font-weight:700;">Loan Type Name</label>
-									<input type="text" id="loan_type_name_jnsa" name="loan_type_name_jnsa" style="width:100%; height:44px; border-radius:8px; background:#ffffff; color:#212529; border:1px solid #d1d5db; padding:0 12px; outline:none;">
+										<input type="text" id="loan_type_name_jnsa" name="loan_type_name_jnsa" value="<?php echo htmlspecialchars($edit_loan_type_jnsa['loan_type_name_jnsa'] ?? ''); ?>" style="width:100%; height:44px; border-radius:8px; background:#ffffff; color:#212529; border:1px solid #d1d5db; padding:0 12px; outline:none;">
 								</div>
 								<div class="col-12 col-md-7">
 									<label for="description_jnsa" style="display:block; margin-bottom:8px; color:#212529; font-size:13px; font-weight:700;">Description</label>
-									<input type="text" id="description_jnsa" name="description_jnsa" style="width:100%; height:44px; border-radius:8px; background:#ffffff; color:#212529; border:1px solid #d1d5db; padding:0 12px; outline:none;">
+										<input type="text" id="description_jnsa" name="description_jnsa" value="<?php echo htmlspecialchars($edit_loan_type_jnsa['description_jnsa'] ?? ''); ?>" style="width:100%; height:44px; border-radius:8px; background:#ffffff; color:#212529; border:1px solid #d1d5db; padding:0 12px; outline:none;">
 								</div>
 								<div class="col-12">
-									<button type="submit" name="add_loan_type_jnsa" value="1" style="height:46px; min-width:180px; border:none; border-radius:8px; background:#a82329; color:#ffffff; font-size:14px; font-weight:700; padding:0 18px; box-shadow:0 6px 18px rgba(168,35,41,0.28);">Add Loan Type</button>
+										<button type="submit" name="save_loan_type_jnsa" value="1" style="height:46px; min-width:180px; border:none; border-radius:8px; background:#a82329; color:#ffffff; font-size:14px; font-weight:700; padding:0 18px; box-shadow:0 6px 18px rgba(168,35,41,0.28);"><?php echo $edit_loan_type_jnsa ? 'Update Loan Type' : 'Add Loan Type'; ?></button>
+										<?php if ($edit_loan_type_jnsa): ?>
+											<a href="employeeloantypes_jnsa.php" style="display:inline-flex; align-items:center; justify-content:center; height:46px; min-width:140px; margin-left:10px; border-radius:8px; border:1px solid #d1d5db; background:#ffffff; color:#374151; text-decoration:none; font-size:14px; font-weight:700; padding:0 18px;">Cancel</a>
+										<?php endif; ?>
 								</div>
 							</div>
 						</form>
@@ -182,18 +236,23 @@ $loan_types_count_jnsa = (int) dashboard_scalar($conn, "SELECT COUNT(*) FROM loa
 							<tr style="text-align:left; color:#495057; font-size:12px; letter-spacing:0.2px; text-transform:uppercase;">
 								<th style="padding:12px 10px; border-bottom:1px solid #e5e7eb;">Loan Type Name</th>
 								<th style="padding:12px 10px; border-bottom:1px solid #e5e7eb;">Description</th>
+								<th style="padding:12px 10px; border-bottom:1px solid #e5e7eb;">Actions</th>
 							</tr>
 						</thead>
 						<tbody>
 							<?php if (empty($loan_types_jnsa)): ?>
 								<tr>
-									<td colspan="2" style="padding:18px 10px; color:#495057;">No loan types found.</td>
+									<td colspan="3" style="padding:18px 10px; color:#495057;">No loan types found.</td>
 								</tr>
 							<?php else: ?>
 								<?php foreach ($loan_types_jnsa as $loan_type_row_jnsa): ?>
 									<tr style="border-bottom:1px solid #f1f3f5; color:#212529;">
 										<td style="padding:14px 10px;"><?php echo htmlspecialchars($loan_type_row_jnsa['loan_type_name_jnsa']); ?></td>
 										<td style="padding:14px 10px;"><?php echo htmlspecialchars($loan_type_row_jnsa['description_jnsa'] ?? ''); ?></td>
+										<td style="padding:14px 10px; white-space:nowrap;">
+											<a href="employeeloantypes_jnsa.php?edit_jnsa=<?php echo (int) $loan_type_row_jnsa['loan_type_id_jnsa']; ?>" style="margin-right:12px; color:#a82329; text-decoration:none; font-weight:700;">Edit</a>
+											<a href="employeeloantypes_jnsa.php?delete_jnsa=<?php echo (int) $loan_type_row_jnsa['loan_type_id_jnsa']; ?>" onclick="return confirm('Delete this loan type?');" style="color:#374151; text-decoration:none; font-weight:700;">Delete</a>
+										</td>
 									</tr>
 								<?php endforeach; ?>
 							<?php endif; ?>

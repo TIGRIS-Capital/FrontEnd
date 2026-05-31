@@ -1,7 +1,5 @@
 <?php
 session_start();
-
-// Normalize the employee session before running any queries.
 $username = $_SESSION['username'] ?? 'officer01';
 $userRole = $_SESSION['user_type'] ?? 'Employee';
 if (!isset($employee_name_jnsa)) {
@@ -14,7 +12,7 @@ $payments_nav_active_jnsa = ($current_page_jnsa === 'employeepayments_jnsa.php')
 $loan_types_nav_active_jnsa = ($current_page_jnsa === 'employeeloantypes_jnsa.php');
 require_once "Naval_FinalsActivity3_DB.php";
 
-// Shared scalar helper used by the employee metrics.
+// scalar employee metrics.
 function dashboard_scalar(mysqli $conn, string $sql, $default = 0) {
     $result = $conn->query($sql);
     if (!$result) {
@@ -24,18 +22,18 @@ function dashboard_scalar(mysqli $conn, string $sql, $default = 0) {
     return $row[0] ?? $default;
 }
 
-// Format values as currency for the KPI cards.
+// Format currency for the KPI cards.
 function dashboard_money($value) {
     return '$' . number_format((float)$value, 2);
 }
 
-// Gather the approval and workload figures displayed in the cards.
+// approval and workload figures 
 $pendingApprovals = (int) dashboard_scalar($conn, "SELECT COUNT(*) FROM loan_jnsa WHERE date_approved_jnsa IS NULL");
 $approvedToday = (int) dashboard_scalar($conn, "SELECT COUNT(*) FROM loan_jnsa WHERE date_approved_jnsa IS NOT NULL AND DATE(date_approved_jnsa) = CURDATE()");
 $totalValuePending = (float) dashboard_scalar($conn, "SELECT COALESCE(SUM(loan_amount_jnsa), 0) FROM loan_jnsa WHERE date_approved_jnsa IS NULL");
 $activeMembers = (int) dashboard_scalar($conn, "SELECT COUNT(*) FROM loan_member_jnsa WHERE user_status_jnsa = 'Active'");
 
-// Build the weekly status distribution used by the progress bars.
+// weekly status distribution for progress bars
 $approvedLoans = (int) dashboard_scalar($conn, "SELECT COUNT(*) FROM loan_jnsa WHERE date_approved_jnsa IS NOT NULL");
 $rejectedLoans = (int) dashboard_scalar($conn, "SELECT COUNT(*) FROM loan_jnsa WHERE date_approved_jnsa IS NULL AND date_disbursed_jnsa IS NULL AND DATE(date_applied_jnsa) < DATE_SUB(CURDATE(), INTERVAL 30 DAY)");
 $underReviewLoans = (int) dashboard_scalar($conn, "SELECT COUNT(*) FROM loan_jnsa WHERE date_approved_jnsa IS NULL AND DATE(date_applied_jnsa) >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)");
