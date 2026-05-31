@@ -36,7 +36,7 @@ ensure_email_column_jnsa($conn);
     <div class="container-fluid" style="max-width: 1200px;">
         <div class="row align-items-center justify-content-center">
 
-                    <!-- Left Column: Logo, title and marketing text -->
+                    <!--Logo title -->
                 <div class="col-md-5 text-center mb-5 mb-md-0 d-flex flex-column align-items-center justify-content-center">
                 <div style="width:200px; height:200px; background-color: #121416; border-radius: 24px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 16px rgba(18, 20, 22, 0.18); margin-bottom: 20px; overflow:hidden;">
                     <img src="Tigris_Logo_NoText.png" alt="Tigris Capital Logo" style="width: 100%; height: 100%; object-fit: cover; border-radius: 24px;">
@@ -50,7 +50,7 @@ ensure_email_column_jnsa($conn);
                 <p class="mt-3" style="max-width: 320px; color:#6b7280;">Create an account to access member features and manage loans securely.</p>
             </div>
 
-            <!-- Right Column: Registration form card -->
+            <!-- Registration form card -->
             <div class="col-md-6 d-flex justify-content-center justify-content-md-start ps-md-5">
                 <div class="bg-white rounded-4 p-5 w-100" style="max-width: 720px; box-shadow: 0 15px 35px rgba(18,20,22,0.08) !important; border:1px solid #e5e7eb;">
                     <form action="Registration_jn.php" method="post" enctype="multipart/form-data">
@@ -60,6 +60,7 @@ ensure_email_column_jnsa($conn);
                             </div>
                         </div>
 
+                        <!-- Personal Details -->
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <div style="display:flex; flex-direction:column; gap:10px;">
@@ -110,6 +111,7 @@ ensure_email_column_jnsa($conn);
                                 </div>
                             </div>
 
+                            <!-- Accouunt Details -->
                             <div class="col-md-6 mb-3">
                                 <div style="display:flex; flex-direction:column; gap:10px;">
                                     <label class="form-label" style="color:#4b5563; margin:0;">Username</label>
@@ -150,7 +152,7 @@ ensure_email_column_jnsa($conn);
     </div>
 
 <?php
-// Script: Handle form submission, image upload, OTP generation and send verification email
+//form submission image upload OTP generate send verification email
 if(isset($_POST['btnsave_jnsa'])) {
     $fullname_jnsa = $_POST['lname_jnsa'] . ", " . $_POST['fname_jnsa'] . " " . $_POST['mname_jnsa'] . " " . $_POST['suffix_jnsa'];
     $contact_jnsa = $_POST['contact_jnsa'];

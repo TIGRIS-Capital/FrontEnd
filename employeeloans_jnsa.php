@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// Normalize the employee session and redirect non-employees away.
 if (!isset($_SESSION['member_id_jnsa']) && isset($_SESSION['member_id'])) {
 	$_SESSION['member_id_jnsa'] = (int) $_SESSION['member_id'];
 }
@@ -21,7 +20,7 @@ $loan_types_nav_active_jnsa = ($current_page_jnsa === 'employeeloantypes_jnsa.ph
 
 require_once "Naval_FinalsActivity3_DB.php";
 
-// Small scalar helper for the summary cards.
+// scalar helper for the summary cards.
 function dashboard_scalar(mysqli $conn, string $sql, $default = 0) {
 	$result = $conn->query($sql);
 	if (!$result) {
@@ -31,7 +30,7 @@ function dashboard_scalar(mysqli $conn, string $sql, $default = 0) {
 	return $row[0] ?? $default;
 }
 
-// Format values as currency for table and card output.
+// currency for table and card output
 function dashboard_money($value) {
 	return '$' . number_format((float) $value, 2);
 }
@@ -39,12 +38,12 @@ function dashboard_money($value) {
 $status_message_jnsa = '';
 $error_message_jnsa = '';
 
-// Search inputs and sort settings read from the query string.
+// Search inputs and sort settings 
 $q = trim($_GET['q'] ?? '');
 $sort = $_GET['sort'] ?? '';
 $dir = strtolower($_GET['dir'] ?? 'desc');
 
-// Restrict sorting to a known column map.
+// Restrict sorting
 $allowed_sort_cols = [
 	'loan_id' => 'l.loan_id_jnsa',
 	'member' => 'm.member_name_jnsa',
@@ -56,7 +55,7 @@ $allowed_sort_cols = [
 if (!in_array($dir, ['asc','desc'])) { $dir = 'desc'; }
 $order_by = $allowed_sort_cols[$sort] ?? 'l.date_applied_jnsa';
 
-// Handle the approval action inside a transaction.
+// Handle the approval action 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['approve_loan_jnsa'], $_POST['loan_id_jnsa'])) {
 	$approve_loan_id_jnsa = (int) $_POST['loan_id_jnsa'];
 
@@ -113,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['approve_loan_jnsa'], 
 
 $loans_jnsa = [];
 
-// Build dynamic WHERE clauses based on filters.
+// Build dynamic WHERE clauses based on filters
 $where_clauses = [];
 if ($q !== '') {
 	$esc = $conn->real_escape_string($q);
@@ -130,7 +129,7 @@ if (!empty($where_clauses)) {
 	$where_sql = ' WHERE ' . implode(' AND ', $where_clauses);
 }
 
-// Fetch joined loan and member rows for the table.
+// Fetch joined loan and member row
 $sql_loans = "SELECT l.loan_id_jnsa, l.loan_amount_jnsa, l.loan_term_jnsa, l.date_applied_jnsa, l.date_approved_jnsa, l.date_disbursed_jnsa, l.outstanding_balance_jnsa, m.member_name_jnsa, m.member_id_jnsa
 	FROM loan_jnsa l
 	INNER JOIN loan_member_jnsa m ON m.member_id_jnsa = l.borrower_id_jnsa" . $where_sql . " ORDER BY $order_by $dir, l.loan_id_jnsa DESC";
@@ -142,7 +141,7 @@ if ($loans_query_jnsa && $loans_query_jnsa->num_rows > 0) {
 	}
 }
 
-// KPI numbers displayed above the table.
+// KPI numbers display
 $pending_count_jnsa = (int) dashboard_scalar($conn, "SELECT COUNT(*) FROM loan_jnsa WHERE date_approved_jnsa IS NULL");
 $approved_count_jnsa = (int) dashboard_scalar($conn, "SELECT COUNT(*) FROM loan_jnsa WHERE date_approved_jnsa IS NOT NULL");
 $total_value_pending_jnsa = (float) dashboard_scalar($conn, "SELECT COALESCE(SUM(loan_amount_jnsa), 0) FROM loan_jnsa WHERE date_approved_jnsa IS NULL");
