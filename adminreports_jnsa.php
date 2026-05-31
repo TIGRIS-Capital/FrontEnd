@@ -36,6 +36,7 @@ if ($logs_query_jnsa && $logs_query_jnsa->num_rows > 0) {
 </head>
 <body style="margin:0; background:#f4f5f7; color:#1f2937; font-family: Arial, Helvetica, sans-serif; overflow-x:hidden;">
 	<div style="min-height:100vh; display:flex; background:#f4f5f7;">
+		<!-- sideb... -->
 		<aside style="width:240px; background:#121416; border-right:1px solid rgba(226,232,240,0.08); display:flex; flex-direction:column; justify-content:space-between;">
 			<div>
 				<div style="height:69px; display:flex; align-items:center; gap:12px; padding:0 18px; border-bottom:1px solid rgba(226,232,240,0.08);">
@@ -55,6 +56,7 @@ if ($logs_query_jnsa && $logs_query_jnsa->num_rows > 0) {
 		</aside>
 
 		<main style="flex:1; min-width:0; display:flex; flex-direction:column;">
+			<!-- head... -->
 			<header style="height:69px; background:#121416; border-bottom:1px solid rgba(226,232,240,0.08); display:flex; align-items:center; justify-content:space-between; padding:0 18px 0 20px; color:#fff;">
 				<div>
 					<div style="font-size:19px; font-weight:600;">Audit Log Reports</div>
@@ -75,6 +77,7 @@ if ($logs_query_jnsa && $logs_query_jnsa->num_rows > 0) {
 					<div style="font-size:14px; color:#6b7280;">Chronological action log for all tracked system events.</div>
 				</div>
 
+				<!-- stats... -->
 				<div class="row g-3" style="margin:0 0 24px 0;">
 					<div class="col-12 col-md-6 px-2">
 						<div style="height:110px; background:#ffffff; border:1px solid #e5e7eb; border-radius:10px; box-shadow:0 2px 10px rgba(15,23,42,0.06); padding:14px 16px; display:flex; justify-content:space-between; align-items:flex-start;">
@@ -97,6 +100,7 @@ if ($logs_query_jnsa && $logs_query_jnsa->num_rows > 0) {
 					</div>
 				</div>
 
+				<!-- tabl... -->
 				<div style="background:#ffffff; border:1px solid #e5e7eb; border-radius:12px; box-shadow:0 10px 30px rgba(15,23,42,0.08); padding:18px; overflow-x:auto;">
 					<table style="width:100%; border-collapse:collapse; min-width:860px;">
 						<thead>

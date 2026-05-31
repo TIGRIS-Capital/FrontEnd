@@ -6,8 +6,6 @@ use PHPMailer\PHPMailer\Exception;
 // Load Composer's autoloader
 require 'vendor/autoload.php';
 
-// Helper: send_verification() builds and sends OTP email using PHPMailer
-
 function send_verification($fullname, $email, $otp){
 
     $mail = new PHPMailer(true);

@@ -2,7 +2,6 @@
 session_start();
 require_once "Naval_FinalsActivity3_DB.php";
 
-// Admin session context and shared helpers for the member-management page.
 $admin_username_jnsa = $_SESSION['username'] ?? 'admin01';
 $admin_role_jnsa = $_SESSION['user_type'] ?? 'Admin';
 $admin_notice_jnsa = '';
@@ -22,7 +21,7 @@ function admin_redirect_jnsa($query_jnsa = []) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_member_jnsa'])) {
-	// Handle create and update submissions for user accounts.
+	// Handle create and update submissions accounts
 	$member_id_jnsa = isset($_POST['member_id_jnsa']) ? (int) $_POST['member_id_jnsa'] : 0;
 	$member_name_jnsa = trim($_POST['member_name_jnsa'] ?? '');
 	$username_jnsa = trim($_POST['username_jnsa'] ?? '');
@@ -81,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_member_jnsa'])) 
 }
 
 if (isset($_GET['toggle_jnsa'])) {
-	// Toggle the selected account between active and inactive states.
+	// Toggle active and inactive state
 	$toggle_member_id_jnsa = (int) $_GET['toggle_jnsa'];
 	if ($toggle_member_id_jnsa > 0) {
 		$toggle_stmt_jnsa = $conn->prepare("UPDATE loan_member_jnsa SET user_status_jnsa = CASE WHEN user_status_jnsa = 'Active' THEN 'Inactive' ELSE 'Active' END WHERE member_id_jnsa = ?");
@@ -93,13 +92,12 @@ if (isset($_GET['toggle_jnsa'])) {
 	admin_redirect_jnsa();
 }
 
-// Pull any flash notice produced by the previous action.
 if (isset($_SESSION['adminmembers_notice_jnsa'])) {
 	$admin_notice_jnsa = $_SESSION['adminmembers_notice_jnsa'];
 	unset($_SESSION['adminmembers_notice_jnsa']);
 }
 
-// Load the selected record when editing an existing account.
+// Load selected record
 $edit_member_id_jnsa = isset($_GET['edit_jnsa']) ? (int) $_GET['edit_jnsa'] : 0;
 $edit_member_jnsa = null;
 if ($edit_member_id_jnsa > 0) {
@@ -114,7 +112,8 @@ if ($edit_member_id_jnsa > 0) {
 	}
 }
 
-// Load the member list and compute the summary counts shown in the UI.
+// Load member list
+//  compute the summary counts
 $member_rows_jnsa = [];
 $member_query_jnsa = $conn->query("SELECT member_id_jnsa, member_name_jnsa, username_jnsa, user_type_jnsa, email_jnsa, user_status_jnsa FROM loan_member_jnsa ORDER BY member_id_jnsa DESC");
 if ($member_query_jnsa) {
@@ -144,7 +143,7 @@ foreach ($member_rows_jnsa as $member_row_jnsa) {
 </head>
 <body style="margin:0; background:#f4f5f7; color:#1f2937; font-family: Arial, Helvetica, sans-serif; overflow-x:hidden;">
 	<div style="min-height:100vh; display:flex; background:#f4f5f7;">
-		<!-- Sidebar -->
+		<!-- sideb... -->
 		<aside style="width:240px; background:#121416; border-right:1px solid rgba(226,232,240,0.08); display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 0 0 1px rgba(0,0,0,0.08);">
 			<div>
 				<div style="height:69px; display:flex; align-items:center; gap:12px; padding:0 18px; border-bottom:1px solid rgba(226,232,240,0.08);">
@@ -154,8 +153,8 @@ foreach ($member_rows_jnsa as $member_row_jnsa) {
 				<nav style="padding:18px 12px 0 12px;">
 					<a href="admindashboard_jn.php" style="display:flex; align-items:center; gap:14px; height:48px; padding:0 16px; margin-bottom:10px; color:#cbd5e1; text-decoration:none; font-size:14px; font-weight:500; border-radius:8px;">Overview</a>
 					<a href="adminmembers_jnsa.php" style="display:flex; align-items:center; gap:14px; height:48px; padding:0 16px; margin-bottom:10px; background:rgba(168,35,41,0.16); color:#ffffff; text-decoration:none; font-size:14px; font-weight:600; border-radius:8px; border:1px solid rgba(168,35,41,0.28);">Members</a>
-					<a href="loans_list_jn.php" style="display:flex; align-items:center; gap:14px; height:48px; padding:0 16px; margin-bottom:10px; color:#cbd5e1; text-decoration:none; font-size:14px; font-weight:500;">Loans</a>
-					<a href="reports_jn.php" style="display:flex; align-items:center; gap:14px; height:48px; padding:0 16px; color:#cbd5e1; text-decoration:none; font-size:14px; font-weight:500;">Reports</a>
+					<a href="adminloans_jnsa.php" style="display:flex; align-items:center; gap:14px; height:48px; padding:0 16px; margin-bottom:10px; color:#cbd5e1; text-decoration:none; font-size:14px; font-weight:500;">Loans</a>
+					<a href="adminreports_jnsa.php" style="display:flex; align-items:center; gap:14px; height:48px; padding:0 16px; color:#cbd5e1; text-decoration:none; font-size:14px; font-weight:500;">Reports</a>
 				</nav>
 			</div>
 			<div style="padding:20px 14px; border-top:1px solid rgba(226,232,240,0.08);">
@@ -164,7 +163,7 @@ foreach ($member_rows_jnsa as $member_row_jnsa) {
 		</aside>
 
 		<main style="flex:1; min-width:0; display:flex; flex-direction:column;">
-			<!-- Header -->
+			<!-- head... -->
 			<header style="height:69px; background:#121416; border-bottom:1px solid rgba(226,232,240,0.08); display:flex; align-items:center; justify-content:space-between; padding:0 18px 0 20px; color:#fff;">
 				<div>
 					<div style="font-size:19px; font-weight:600;">User Management</div>
@@ -179,7 +178,7 @@ foreach ($member_rows_jnsa as $member_row_jnsa) {
 				</div>
 			</header>
 
-			<!-- Main Section -->
+			<!-- main... -->
 			<section style="padding:28px 18px 18px 18px; background:#f4f5f7; flex:1;">
 				<div style="margin-bottom:18px;">
 					<div style="font-size:26px; font-weight:600; color:#1f2937; letter-spacing:-0.2px; margin-bottom:9px;">Admin Members</div>
@@ -198,7 +197,7 @@ foreach ($member_rows_jnsa as $member_row_jnsa) {
 					</div>
 				<?php endif; ?>
 
-				<!-- KPI Cards -->
+				<!-- kpi... -->
 				<div class="row gx-4 gy-4" style="margin:0 0 24px 0;">
 					<div class="col-12 col-md-4 px-2">
 						<div style="height:110px; background:#ffffff; border:1px solid #e5e7eb; border-radius:10px; box-shadow:0 2px 10px rgba(15,23,42,0.06); padding:14px 16px; display:flex; justify-content:space-between; align-items:flex-start;">
@@ -229,7 +228,7 @@ foreach ($member_rows_jnsa as $member_row_jnsa) {
 					</div>
 				</div>
 
-				<!-- Add or Edit user account -->
+				<!-- form... -->
 				<div class="row g-3" style="margin:0 0 20px 0;">
 					<div class="col-12 col-lg-12 px-2">
 						<div style="background:#ffffff; border:1px solid #e5e7eb; border-radius:10px; box-shadow:0 1px 4px rgba(16,24,40,.04); padding:16px;">
@@ -280,7 +279,7 @@ foreach ($member_rows_jnsa as $member_row_jnsa) {
 					</div>
 				</div>
 
-				<!-- Users listing -->
+				<!-- list... -->
 				<div style="background:#ffffff; border:1px solid #e5e7eb; border-radius:10px; box-shadow:0 1px 4px rgba(16,24,40,.04); padding:16px;">
 					<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; gap:12px; flex-wrap:wrap;">
 						<div>

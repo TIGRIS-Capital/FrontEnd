@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// Load the admin identity and shared database connection.
 $username_jnsa = $_SESSION['username'] ?? 'admin01';
 $userRole_jnsa = $_SESSION['user_type'] ?? 'Admin';
 
@@ -16,18 +15,18 @@ function dashboard_scalar_jnsa(mysqli $conn, string $sql, $default = 0) {
     return $row[0] ?? $default;
 }
 
-// Convert raw numbers into a currency string for the dashboard cards.
+// Convert into a currency
 function dashboard_money_jnsa($value) {
     return '$' . number_format((float) $value, 2);
 }
 
-// Collect the dashboard KPI values shown at the top of the page.
+// Collect the dashboard KPI values
 $active_users_jnsa = (int) dashboard_scalar_jnsa($conn, "SELECT COUNT(*) FROM loan_member_jnsa WHERE user_status_jnsa = 'Active'");
 $total_funds_disbursed_jnsa = (float) dashboard_scalar_jnsa($conn, "SELECT COALESCE(SUM(loan_amount_jnsa), 0) FROM loan_jnsa WHERE date_approved_jnsa IS NOT NULL");
 $total_outstanding_balances_jnsa = (float) dashboard_scalar_jnsa($conn, "SELECT COALESCE(SUM(outstanding_balance_jnsa), 0) FROM loan_jnsa");
 $system_alerts_logs_jnsa = (int) dashboard_scalar_jnsa($conn, "SELECT COUNT(*) FROM loan_logs_jnsa");
 
-// Pull the latest activity rows for the audit table.
+// Pull the latest activity rows
 $recent_logs_query_jnsa = $conn->query("SELECT lg.log_id_jnsa, lg.action_jnsa, lg.datetime_jnsa, lm.member_name_jnsa FROM loan_logs_jnsa lg LEFT JOIN loan_member_jnsa lm ON lm.member_id_jnsa = lg.member_id_jnsa ORDER BY lg.datetime_jnsa DESC, lg.log_id_jnsa DESC LIMIT 5");
 $recent_logs_rows_jnsa = [];
 if ($recent_logs_query_jnsa && $recent_logs_query_jnsa->num_rows > 0) {
@@ -46,6 +45,7 @@ if ($recent_logs_query_jnsa && $recent_logs_query_jnsa->num_rows > 0) {
 </head>
 <body style="margin:0; background:#f4f6f9; color:#212529; font-family: Arial, Helvetica, sans-serif; overflow-x:hidden;">
     <div style="min-height:100vh; display:flex; background:#f4f6f9;">
+        <!-- sideb... -->
         <aside style="width:240px; background:#121416; border-right:1px solid rgba(226,232,240,0.08); display:flex; flex-direction:column; justify-content:space-between;">
             <div>
                 <div style="height:69px; display:flex; align-items:center; gap:12px; padding:0 18px; border-bottom:1px solid rgba(226,232,240,0.08);">
@@ -65,6 +65,7 @@ if ($recent_logs_query_jnsa && $recent_logs_query_jnsa->num_rows > 0) {
         </aside>
 
         <main style="flex:1; min-width:0; display:flex; flex-direction:column;">
+            <!-- head... -->
             <header style="height:69px; background:#121416; border-bottom:1px solid rgba(226,232,240,0.08); display:flex; align-items:center; justify-content:space-between; padding:0 18px 0 20px; color:#fff;">
                 <div>
                     <div style="font-size:19px; font-weight:600;">Admin Dashboard</div>
@@ -85,6 +86,7 @@ if ($recent_logs_query_jnsa && $recent_logs_query_jnsa->num_rows > 0) {
                     <div style="font-size:14px; color:#6b7280;">Live system metrics, shortcuts, and the latest audit trail activity.</div>
                 </div>
 
+                <!-- metr... -->
                 <div class="row g-3" style="margin:0 0 24px 0;">
                     <div class="col-12 col-md-3 px-2">
                         <div style="background:#ffffff; border:1px solid #e5e7eb; border-radius:10px; box-shadow:0 2px 10px rgba(15,23,42,0.06); padding:16px; min-height:140px; display:flex; flex-direction:column; justify-content:space-between;">
@@ -124,6 +126,7 @@ if ($recent_logs_query_jnsa && $recent_logs_query_jnsa->num_rows > 0) {
                     </div>
                 </div>
 
+                <!-- quick a... -->
                 <div class="row g-3">
                     <div class="col-12 col-lg-5">
                         <div style="background:#ffffff; border:1px solid #e5e7eb; border-radius:12px; box-shadow:0 10px 30px rgba(15,23,42,0.08); padding:18px; height:100%;">
@@ -136,6 +139,7 @@ if ($recent_logs_query_jnsa && $recent_logs_query_jnsa->num_rows > 0) {
                         </div>
                     </div>
 
+                    <!-- log tabl... -->
                     <div class="col-12 col-lg-7">
                         <div style="background:#ffffff; border:1px solid #e5e7eb; border-radius:12px; box-shadow:0 10px 30px rgba(15,23,42,0.08); padding:18px; height:100%; overflow-x:auto;">
                             <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; gap:12px;">
