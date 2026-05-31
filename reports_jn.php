@@ -3,9 +3,13 @@ session_start();
 require_once "Naval_FinalsActivity3_DB.php";
 $username = $_SESSION['username'] ?? 'officer01';
 $userRole = $_SESSION['user_type'] ?? 'Employee';
-$result = $conn->query("SELECT COUNT(*) AS cnt FROM loan_member_jn WHERE user_status_jnsa = 'Active'");
+$result = $conn->query("SELECT COUNT(*) AS cnt FROM loan_member_jnsa WHERE user_status_jnsa = 'Active'");
 $activeMembers = 0;
 if($result && $row = $result->fetch_assoc()){ $activeMembers = $row['cnt']; }
+
+$loanCountResult = $conn->query("SELECT COUNT(*) AS cnt FROM loan_jnsa");
+$loanCount = 0;
+if($loanCountResult && $loanCountRow = $loanCountResult->fetch_assoc()){ $loanCount = $loanCountRow['cnt']; }
 ?>
 <!doctype html>
 <html lang="en">
@@ -55,7 +59,7 @@ if($result && $row = $result->fetch_assoc()){ $activeMembers = $row['cnt']; }
           <div class="col-md-4">
             <div style="background:#fff; border:1px solid #e5e7eb; border-radius:8px; padding:16px;">
               <div style="font-size:12px; color:#6b7280;">Sample Loans</div>
-              <div style="font-size:22px; font-weight:700;">3</div>
+              <div style="font-size:22px; font-weight:700;"><?php echo intval($loanCount); ?></div>
             </div>
           </div>
         </div>

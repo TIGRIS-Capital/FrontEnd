@@ -7,39 +7,71 @@ $login_error = "";
 
 if (isset($_POST['sub_jnsa'])) {
     // user input
-    $username_jnsa = $_POST['username_jnsa'];
+    $username_jnsa = trim($_POST['username_jnsa']);
     $password_jnsa = md5($_POST['password_jnsa']); //encrypt password
 
-    $loginsql = "SELECT * FROM loan_member_jn WHERE username_jnsa='$username_jnsa' AND password_jnsa='$password_jnsa'";
-    $result = $conn->query($loginsql);
+    $loginsql = "SELECT * FROM loan_member_jnsa WHERE username_jnsa = ? LIMIT 1";
+    $stmt_jnsa = $conn->prepare($loginsql);
+    if ($stmt_jnsa) {
+        $stmt_jnsa->bind_param("s", $username_jnsa);
+        $stmt_jnsa->execute();
+        $result = $stmt_jnsa->get_result();
+    } else {
+        $result = false;
+    }
 
     //for logs
 
     if ($result && $result->num_rows == 1) {
     $fieldnames = $result->fetch_assoc();
 
+    if ($fieldnames['password_jnsa'] !== $password_jnsa) {
+        $login_error = "Invalid username or password";
+    } else {
+
     // Account verify
     if ($fieldnames['user_status_jnsa'] !== 'Active') {
-        $_SESSION['verify_email'] = $username_jnsa; // Save session context for otpverify.php
+        $_SESSION['verify_email'] = $fieldnames['email_jnsa'] ?? $username_jnsa; // Save session context for otpverify.php
+        $login_error = "Your account is pending verification. Please verify your email before logging in.";
     } else {
         // Account status
-        $member_id_jnsa = $fieldnames['member_id_jnsa'];
-        $logsql = "INSERT INTO loan_logs_jn (member_id_jnsa, action_jnsa, datetime_jnsa) VALUES ('$member_id_jnsa', 'Logged In', NOW())";
-        $conn->query($logsql);
+        $member_id_jnsa = $fieldnames['member_id_jnsa'] ?? $fieldnames['id'] ?? $fieldnames['member_id'] ?? 0;
+
+        $log_stmt = $conn->prepare("INSERT INTO loan_logs_jnsa (member_id_jnsa, action_jnsa, datetime_jnsa) VALUES (?, ?, NOW())");
+        if ($log_stmt) {
+            $action_jnsa = 'Logged In';
+
+            $mid = (int)$member_id_jnsa;
+            $log_stmt->bind_param('is', $mid, $action_jnsa);
+            $log_stmt->execute();
+            $log_stmt->close();
+        }
         $usertype_jnsa = $fieldnames['user_type_jnsa'];
+        $normalized_user_type = strtolower(trim((string)$usertype_jnsa));
         
+        $_SESSION['member_id_jnsa'] = $member_id_jnsa;
         $_SESSION['user_type'] = $usertype_jnsa;
         $_SESSION['username'] = $username_jnsa;
+        $_SESSION['member_name_jnsa'] = $fieldnames['member_name_jnsa'] ?? $username_jnsa;
 
-        if ($usertype == "admin") {
+        if ($normalized_user_type == "admin") {
             header("Location: admindashboard_jn.php");
             exit();
-        } else if ($usertype == "employee") {
+        } else if ($normalized_user_type == "employee") {
             header("Location: employeedashboard_jn.php");
             exit();
+        } else if ($normalized_user_type == "member") {
+            header("Location: memberdashboard_jnsa.php");
+            exit();
+        } else {
+            $login_error = "Account role is not configured for dashboard access.";
         }
     }
+    }
     
+    if (isset($stmt_jnsa)) {
+        $stmt_jnsa->close();
+    }
     } else {
     
     $login_error = "Invalid username or password";
@@ -51,7 +83,7 @@ if (isset($_POST['sub_jnsa'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>TIGRIS Capital</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
 <body style="margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; background:linear-gradient(135deg, #f7f8fa 0%, #eef1f4 100%); font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color:#1f2937;">
@@ -105,13 +137,13 @@ if (isset($_POST['sub_jnsa'])) {
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></scrip   t>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <?php if($login_error): ?>
     <script>
         Swal.fire({
             icon: 'error',
             title: 'Login Failed',
-            text: '<?php echo $login_error; ?>'
+            text: <?php echo json_encode($login_error); ?>
         });
     </script>
     <?php endif; ?>
