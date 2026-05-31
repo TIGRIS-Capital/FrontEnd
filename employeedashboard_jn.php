@@ -1,5 +1,7 @@
 <?php
 session_start();
+
+// Normalize the employee session before running any queries.
 $username = $_SESSION['username'] ?? 'officer01';
 $userRole = $_SESSION['user_type'] ?? 'Employee';
 if (!isset($employee_name_jnsa)) {
@@ -12,6 +14,7 @@ $payments_nav_active_jnsa = ($current_page_jnsa === 'employeepayments_jnsa.php')
 $loan_types_nav_active_jnsa = ($current_page_jnsa === 'employeeloantypes_jnsa.php');
 require_once "Naval_FinalsActivity3_DB.php";
 
+// Shared scalar helper used by the employee metrics.
 function dashboard_scalar(mysqli $conn, string $sql, $default = 0) {
     $result = $conn->query($sql);
     if (!$result) {
@@ -21,15 +24,18 @@ function dashboard_scalar(mysqli $conn, string $sql, $default = 0) {
     return $row[0] ?? $default;
 }
 
+// Format values as currency for the KPI cards.
 function dashboard_money($value) {
     return '$' . number_format((float)$value, 2);
 }
 
+// Gather the approval and workload figures displayed in the cards.
 $pendingApprovals = (int) dashboard_scalar($conn, "SELECT COUNT(*) FROM loan_jnsa WHERE date_approved_jnsa IS NULL");
 $approvedToday = (int) dashboard_scalar($conn, "SELECT COUNT(*) FROM loan_jnsa WHERE date_approved_jnsa IS NOT NULL AND DATE(date_approved_jnsa) = CURDATE()");
 $totalValuePending = (float) dashboard_scalar($conn, "SELECT COALESCE(SUM(loan_amount_jnsa), 0) FROM loan_jnsa WHERE date_approved_jnsa IS NULL");
 $activeMembers = (int) dashboard_scalar($conn, "SELECT COUNT(*) FROM loan_member_jnsa WHERE user_status_jnsa = 'Active'");
 
+// Build the weekly status distribution used by the progress bars.
 $approvedLoans = (int) dashboard_scalar($conn, "SELECT COUNT(*) FROM loan_jnsa WHERE date_approved_jnsa IS NOT NULL");
 $rejectedLoans = (int) dashboard_scalar($conn, "SELECT COUNT(*) FROM loan_jnsa WHERE date_approved_jnsa IS NULL AND date_disbursed_jnsa IS NULL AND DATE(date_applied_jnsa) < DATE_SUB(CURDATE(), INTERVAL 30 DAY)");
 $underReviewLoans = (int) dashboard_scalar($conn, "SELECT COUNT(*) FROM loan_jnsa WHERE date_approved_jnsa IS NULL AND DATE(date_applied_jnsa) >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)");
@@ -49,7 +55,8 @@ $underReviewPct = min(100, (int) round(($underReviewLoans / $totalLoans) * 100))
 </head>
 <body style="margin:0; background:#f4f6f9; color:#1f2937; font-family: Arial, Helvetica, sans-serif; overflow-x:hidden;">
     <div style="min-height:100vh; display:flex; background:#f4f5f7;">
-        <!-- Sidebar: Employee navigation (Overview / Loans / Payments / Loan Types) -->
+        
+    <!-- Sidebar -->
         <aside style="width:240px; background:#121416; border-right:1px solid rgba(226,232,240,0.08); box-shadow: 0 0 0 1px rgba(0,0,0,0.08); display:flex; flex-direction:column; justify-content:space-between;">
             <div>
                     <div style="height:69px; display:flex; align-items:center; gap:12px; padding:0 18px; border-bottom:1px solid rgba(226,232,240,0.08);">
@@ -62,6 +69,7 @@ $underReviewPct = min(100, (int) round(($underReviewLoans / $totalLoans) * 100))
                     </div>
                 </div>
 
+                <!-- navbar to other page -->
                 <nav style="padding:18px 12px 0 12px;">
                     <a href="employeedashboard_jn.php" style="display:flex; align-items:center; gap:14px; height:48px; border-radius:8px; padding:0 16px; margin-bottom:10px; <?php echo $overview_nav_active_jnsa ? 'background:rgba(168,35,41,0.16); color:#ffffff; font-weight:600; border:1px solid rgba(168,35,41,0.28); box-shadow:inset 0 1px 0 rgba(255,255,255,0.03);' : 'color:#cbd5e1; font-weight:500;'; ?> text-decoration:none; font-size:14px;">Overview</a>
                     <a href="employeeloans_jnsa.php" style="display:flex; align-items:center; gap:14px; height:48px; border-radius:8px; padding:0 16px; margin-bottom:10px; <?php echo $loans_nav_active_jnsa ? 'background:rgba(168,35,41,0.16); color:#ffffff; font-weight:600; border:1px solid rgba(168,35,41,0.28); box-shadow:inset 0 1px 0 rgba(255,255,255,0.03);' : 'color:#cbd5e1; font-weight:500;'; ?> text-decoration:none; font-size:14px;">Loans</a>
@@ -79,7 +87,7 @@ $underReviewPct = min(100, (int) round(($underReviewLoans / $totalLoans) * 100))
         </aside>
 
         <main style="flex:1; min-width:0; display:flex; flex-direction:column;">
-            <!-- Header: Top bar with title and employee info -->
+            <!-- Header -->
             <header style="height:69px; background:#121416; border-bottom:1px solid rgba(226,232,240,0.08); display:flex; align-items:center; justify-content:space-between; padding:0 18px 0 20px;">
 				<div>
 					<div style="font-size:19px; font-weight:600; color:#ffffff; letter-spacing:-0.2px;">Loan Management System - Employee Panel</div>
@@ -99,7 +107,7 @@ $underReviewPct = min(100, (int) round(($underReviewLoans / $totalLoans) * 100))
 				</div>
 			</header>
 
-            <!-- Main Section: Dashboard title, KPI cards, quick actions, and activity panels -->
+            <!-- Main SDashboard -->
             <section style="padding:28px 18px 18px 18px; background:#f4f6f9; flex:1;">
                 <div style="margin-bottom:18px;">
                     <div style="font-size:26px; font-weight:600; color:#1f2937; letter-spacing:-0.2px; margin-bottom:9px;">Employee Dashboard</div>

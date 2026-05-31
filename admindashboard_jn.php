@@ -1,6 +1,7 @@
 <?php
 session_start();
 
+// Load the admin identity and shared database connection.
 $username_jnsa = $_SESSION['username'] ?? 'admin01';
 $userRole_jnsa = $_SESSION['user_type'] ?? 'Admin';
 
@@ -15,15 +16,18 @@ function dashboard_scalar_jnsa(mysqli $conn, string $sql, $default = 0) {
     return $row[0] ?? $default;
 }
 
+// Convert raw numbers into a currency string for the dashboard cards.
 function dashboard_money_jnsa($value) {
     return '$' . number_format((float) $value, 2);
 }
 
+// Collect the dashboard KPI values shown at the top of the page.
 $active_users_jnsa = (int) dashboard_scalar_jnsa($conn, "SELECT COUNT(*) FROM loan_member_jnsa WHERE user_status_jnsa = 'Active'");
 $total_funds_disbursed_jnsa = (float) dashboard_scalar_jnsa($conn, "SELECT COALESCE(SUM(loan_amount_jnsa), 0) FROM loan_jnsa WHERE date_approved_jnsa IS NOT NULL");
 $total_outstanding_balances_jnsa = (float) dashboard_scalar_jnsa($conn, "SELECT COALESCE(SUM(outstanding_balance_jnsa), 0) FROM loan_jnsa");
 $system_alerts_logs_jnsa = (int) dashboard_scalar_jnsa($conn, "SELECT COUNT(*) FROM loan_logs_jnsa");
 
+// Pull the latest activity rows for the audit table.
 $recent_logs_query_jnsa = $conn->query("SELECT lg.log_id_jnsa, lg.action_jnsa, lg.datetime_jnsa, lm.member_name_jnsa FROM loan_logs_jnsa lg LEFT JOIN loan_member_jnsa lm ON lm.member_id_jnsa = lg.member_id_jnsa ORDER BY lg.datetime_jnsa DESC, lg.log_id_jnsa DESC LIMIT 5");
 $recent_logs_rows_jnsa = [];
 if ($recent_logs_query_jnsa && $recent_logs_query_jnsa->num_rows > 0) {

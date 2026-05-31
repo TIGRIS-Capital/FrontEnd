@@ -1,6 +1,7 @@
 <?php
 session_start();
 
+// Normalize the employee session and redirect non-employees away.
 if (!isset($_SESSION['member_id_jnsa']) && isset($_SESSION['member_id'])) {
 	$_SESSION['member_id_jnsa'] = (int) $_SESSION['member_id'];
 }
@@ -20,6 +21,7 @@ $loan_types_nav_active_jnsa = ($current_page_jnsa === 'employeeloantypes_jnsa.ph
 
 require_once "Naval_FinalsActivity3_DB.php";
 
+// Small scalar helper for the summary cards.
 function dashboard_scalar(mysqli $conn, string $sql, $default = 0) {
 	$result = $conn->query($sql);
 	if (!$result) {
@@ -29,6 +31,7 @@ function dashboard_scalar(mysqli $conn, string $sql, $default = 0) {
 	return $row[0] ?? $default;
 }
 
+// Format values as currency for table and card output.
 function dashboard_money($value) {
 	return '$' . number_format((float) $value, 2);
 }
@@ -36,12 +39,12 @@ function dashboard_money($value) {
 $status_message_jnsa = '';
 $error_message_jnsa = '';
 
-// Search inputs and sorting (GET)
+// Search inputs and sort settings read from the query string.
 $q = trim($_GET['q'] ?? '');
 $sort = $_GET['sort'] ?? '';
 $dir = strtolower($_GET['dir'] ?? 'desc');
 
-// allowed sort columns -> SQL mapping
+// Restrict sorting to a known column map.
 $allowed_sort_cols = [
 	'loan_id' => 'l.loan_id_jnsa',
 	'member' => 'm.member_name_jnsa',
@@ -53,6 +56,7 @@ $allowed_sort_cols = [
 if (!in_array($dir, ['asc','desc'])) { $dir = 'desc'; }
 $order_by = $allowed_sort_cols[$sort] ?? 'l.date_applied_jnsa';
 
+// Handle the approval action inside a transaction.
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['approve_loan_jnsa'], $_POST['loan_id_jnsa'])) {
 	$approve_loan_id_jnsa = (int) $_POST['loan_id_jnsa'];
 
@@ -109,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['approve_loan_jnsa'], 
 
 $loans_jnsa = [];
 
-// Build dynamic WHERE clauses based on filters
+// Build dynamic WHERE clauses based on filters.
 $where_clauses = [];
 if ($q !== '') {
 	$esc = $conn->real_escape_string($q);
@@ -126,6 +130,7 @@ if (!empty($where_clauses)) {
 	$where_sql = ' WHERE ' . implode(' AND ', $where_clauses);
 }
 
+// Fetch joined loan and member rows for the table.
 $sql_loans = "SELECT l.loan_id_jnsa, l.loan_amount_jnsa, l.loan_term_jnsa, l.date_applied_jnsa, l.date_approved_jnsa, l.date_disbursed_jnsa, l.outstanding_balance_jnsa, m.member_name_jnsa, m.member_id_jnsa
 	FROM loan_jnsa l
 	INNER JOIN loan_member_jnsa m ON m.member_id_jnsa = l.borrower_id_jnsa" . $where_sql . " ORDER BY $order_by $dir, l.loan_id_jnsa DESC";
@@ -137,6 +142,7 @@ if ($loans_query_jnsa && $loans_query_jnsa->num_rows > 0) {
 	}
 }
 
+// KPI numbers displayed above the table.
 $pending_count_jnsa = (int) dashboard_scalar($conn, "SELECT COUNT(*) FROM loan_jnsa WHERE date_approved_jnsa IS NULL");
 $approved_count_jnsa = (int) dashboard_scalar($conn, "SELECT COUNT(*) FROM loan_jnsa WHERE date_approved_jnsa IS NOT NULL");
 $total_value_pending_jnsa = (float) dashboard_scalar($conn, "SELECT COALESCE(SUM(loan_amount_jnsa), 0) FROM loan_jnsa WHERE date_approved_jnsa IS NULL");
@@ -159,7 +165,7 @@ if (isset($_SESSION['approve_success_jnsa'])) {
 </head>
 <body style="margin:0; background:#f4f6f9; color:#212529; font-family: Arial, Helvetica, sans-serif; overflow-x:hidden;">
 	<div style="min-height:100vh; display:flex; background:#f4f6f9;">
-		<!-- Sidebar: Employee navigation (Overview / Loans / Payments / Loan Types) -->
+		<!-- Sidebar -->
 		<aside style="width:240px; background:#121416; border-right:1px solid rgba(226,232,240,0.08); box-shadow:0 0 0 1px rgba(0,0,0,0.08); display:flex; flex-direction:column; justify-content:space-between;">
 			<div>
 				<div style="height:69px; display:flex; align-items:center; gap:12px; padding:0 18px; border-bottom:1px solid rgba(226,232,240,0.08);">
@@ -172,6 +178,7 @@ if (isset($_SESSION['approve_success_jnsa'])) {
 					</div>
 				</div>
 
+                <!-- navbar to other page -->                
 				<nav style="padding:18px 12px 0 12px;">
 					<a href="employeedashboard_jn.php" style="display:flex; align-items:center; gap:14px; height:48px; border-radius:8px; padding:0 16px; margin-bottom:10px; color:#cbd5e1; text-decoration:none; font-size:14px; font-weight:500;">Overview</a>
 					<a href="employeeloans_jnsa.php" style="display:flex; align-items:center; gap:14px; height:48px; border-radius:8px; padding:0 16px; margin-bottom:10px; <?php echo $loans_nav_active_jnsa ? 'background:rgba(168,35,41,0.16); color:#ffffff; font-weight:600; border:1px solid rgba(168,35,41,0.28); box-shadow:inset 0 1px 0 rgba(255,255,255,0.03);' : 'color:#cbd5e1; font-weight:500;'; ?> text-decoration:none; font-size:14px;">Loans</a>
@@ -186,7 +193,7 @@ if (isset($_SESSION['approve_success_jnsa'])) {
 		</aside>
 
 		<main style="flex:1; min-width:0; display:flex; flex-direction:column;">
-			<!-- Header: Top bar with title and employee info -->
+			<!-- Header -->
 			<header style="height:69px; background:#121416; border-bottom:1px solid rgba(226,232,240,0.08); display:flex; align-items:center; justify-content:space-between; padding:0 18px 0 20px;">
 				<div>
 					<div style="font-size:19px; font-weight:600; color:#ffffff; letter-spacing:-0.2px;">Loan Management System - Employee Panel</div>
@@ -206,14 +213,14 @@ if (isset($_SESSION['approve_success_jnsa'])) {
 				</div>
 			</header>
 
-			<!-- Main Section: Page title, description, KPI cards, search and loans table -->
+			<!-- Main Section -->
 			<section style="padding:28px 18px 18px 18px; background:#f4f6f9; flex:1;">
 				<div style="margin-bottom:18px;">
 					<div style="font-size:26px; font-weight:600; color:#212529; letter-spacing:-0.2px; margin-bottom:9px;">Loan Administration</div>
 					<div style="font-size:14px; color:#495057;">Review submitted loans and approve pending applications.</div>
 				</div>
 
-				<!-- Helper: Sorting helper (used in table headers) -->
+				<!-- Sorting helper (used in table headers) -->
 				<?php
 				function sort_link($key, $label) {
 					$params = $_GET;
@@ -239,7 +246,7 @@ if (isset($_SESSION['approve_success_jnsa'])) {
 					</div>
 				<?php endif; ?>
 
-				<!-- KPI Cards: Pending / Approved / Total Value Pending -->
+				<!-- KPI Cards -->
 				<div class="row gx-4 gy-4" style="margin:0 0 24px 0;">
 					<div class="col-12 col-md-4 px-2">
 						<div style="height:110px; background:#ffffff; border:1px solid #e5e7eb; border-radius:10px; box-shadow:0 2px 10px rgba(15,23,42,0.06); padding:14px 16px; display:flex; justify-content:space-between; align-items:flex-start;">
@@ -272,7 +279,7 @@ if (isset($_SESSION['approve_success_jnsa'])) {
 					</div>
 				</div>
 
-				<!-- Search Form: filter by member name or loan ID -->
+				<!-- Search -->
 				<!-- Search form placed below cards and above the table -->
 				<form method="get" style="display:flex; gap:8px; align-items:center; margin:0 0 16px 0;">
 					<input type="text" name="q" value="<?php echo htmlspecialchars($q); ?>" placeholder="Search member name or loan ID" style="padding:8px 10px; border:1px solid #e5e7eb; border-radius:6px; min-width:220px;">
@@ -280,7 +287,7 @@ if (isset($_SESSION['approve_success_jnsa'])) {
 					<a href="employeeloans_jnsa.php" style="padding:8px 12px; border-radius:6px; border:1px solid #e5e7eb; color:#374151; text-decoration:none;">Clear</a>
 				</form>
 
-				<!-- Table Container: Loans list with sortable headers and action buttons -->
+				<!-- Table Container -->
 				<div style="background:#ffffff; border:1px solid #e5e7eb; border-radius:12px; box-shadow:0 10px 30px rgba(15,23,42,0.08); padding:18px; overflow-x:auto;">
 					<table style="width:100%; border-collapse:collapse; min-width:920px;">
 						<thead>

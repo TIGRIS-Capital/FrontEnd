@@ -1,6 +1,7 @@
 <?php
 session_start();
 
+// Normalize the employee session and gate the page to employees only.
 if (!isset($_SESSION['member_id_jnsa']) && isset($_SESSION['member_id'])) {
 	$_SESSION['member_id_jnsa'] = (int) $_SESSION['member_id'];
 }
@@ -19,6 +20,7 @@ $loan_types_nav_active_jnsa = ($current_page_jnsa === 'employeeloantypes_jnsa.ph
 
 require_once "Naval_FinalsActivity3_DB.php";
 
+// Shared scalar helper for the loan-type summary.
 function dashboard_scalar(mysqli $conn, string $sql, $default = 0) {
 	$result = $conn->query($sql);
 	if (!$result) {
@@ -32,6 +34,7 @@ $success_message_jnsa = '';
 $error_message_jnsa = '';
 
 if (isset($_SESSION['loan_type_success_jnsa'])) {
+	// Retrieve flash messages from the previous request.
 	$success_message_jnsa = $_SESSION['loan_type_success_jnsa'];
 	unset($_SESSION['loan_type_success_jnsa']);
 } elseif (isset($_GET['success']) && $_GET['success'] == '1') {
@@ -39,6 +42,7 @@ if (isset($_SESSION['loan_type_success_jnsa'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_loan_type_jnsa'])) {
+	// Insert a new loan type when the form is submitted.
 	$loan_type_name_jnsa = trim((string) ($_POST['loan_type_name_jnsa'] ?? ''));
 	$description_jnsa = trim((string) ($_POST['description_jnsa'] ?? ''));
 
@@ -61,6 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_loan_type_jnsa'])
 	}
 }
 
+// Load the current loan type catalog and the count used by the card.
 $loan_types_jnsa = [];
 $loan_types_query_jnsa = $conn->query("SELECT loan_type_id_jnsa, loan_type_name_jnsa, description_jnsa FROM loan_type_jnsa ORDER BY loan_type_name_jnsa ASC");
 if ($loan_types_query_jnsa && $loan_types_query_jnsa->num_rows > 0) {
@@ -81,7 +86,7 @@ $loan_types_count_jnsa = (int) dashboard_scalar($conn, "SELECT COUNT(*) FROM loa
 </head>
 <body style="margin:0; background:#f4f6f9; color:#212529; font-family: Arial, Helvetica, sans-serif; overflow-x:hidden;">
 	<div style="min-height:100vh; display:flex; background:#f4f6f9;">
-		<!-- Sidebar: Employee navigation (Overview / Loans / Payments / Loan Types) -->
+		<!-- Sidebar -->
 		<aside style="width:240px; background:#121416; border-right:1px solid rgba(226,232,240,0.08); box-shadow:0 0 0 1px rgba(0,0,0,0.08); display:flex; flex-direction:column; justify-content:space-between;">
 			<div>
 				<div style="height:69px; display:flex; align-items:center; gap:12px; padding:0 18px; border-bottom:1px solid rgba(226,232,240,0.08);">
@@ -94,6 +99,7 @@ $loan_types_count_jnsa = (int) dashboard_scalar($conn, "SELECT COUNT(*) FROM loa
 					</div>
 				</div>
 
+                <!-- navbar to other page -->
 				<nav style="padding:18px 12px 0 12px;">
 					<a href="employeedashboard_jn.php" style="display:flex; align-items:center; gap:14px; height:48px; border-radius:8px; padding:0 16px; margin-bottom:10px; color:#cbd5e1; text-decoration:none; font-size:14px; font-weight:500;">Overview</a>
 					<a href="employeeloans_jnsa.php" style="display:flex; align-items:center; gap:14px; height:48px; border-radius:8px; padding:0 16px; margin-bottom:10px; color:#cbd5e1; text-decoration:none; font-size:14px; font-weight:500;">Loans</a>
@@ -108,7 +114,7 @@ $loan_types_count_jnsa = (int) dashboard_scalar($conn, "SELECT COUNT(*) FROM loa
 		</aside>
 
 		<main style="flex:1; min-width:0; display:flex; flex-direction:column;">
-			<!-- Header: Top bar with title and employee info -->
+			<!-- Header -->
 			<header style="height:69px; background:#121416; border-bottom:1px solid rgba(226,232,240,0.08); display:flex; align-items:center; justify-content:space-between; padding:0 18px 0 20px;">
 				<div>
 					<div style="font-size:19px; font-weight:600; color:#ffffff; letter-spacing:-0.2px;">Loan Management System - Employee Panel</div>
@@ -128,7 +134,7 @@ $loan_types_count_jnsa = (int) dashboard_scalar($conn, "SELECT COUNT(*) FROM loa
 				</div>
 			</header>
 
-			<!-- Main Section: Page title, description, add-loan-type form, and loan types table -->
+			<!-- Main Section -->
 			<section style="padding:28px 18px 18px 18px; background:#f4f6f9; flex:1;">
 				<div style="margin-bottom:18px;">
 					<div style="font-size:26px; font-weight:600; color:#212529; letter-spacing:-0.2px; margin-bottom:9px;">Loan Types</div>
@@ -147,7 +153,7 @@ $loan_types_count_jnsa = (int) dashboard_scalar($conn, "SELECT COUNT(*) FROM loa
 					</div>
 				<?php endif; ?>
 
-				<!-- Form Card: Add New Loan Type -->
+				<!-- Form Card -->
 				<div style="max-width:860px; margin-bottom:24px;">
 					<div style="background:#ffffff; border:1px solid #e5e7eb; border-radius:12px; box-shadow:0 10px 30px rgba(15,23,42,0.08); padding:22px;">
 						<div style="font-size:16px; font-weight:700; color:#212529; margin-bottom:16px;">Add New Loan Type</div>
@@ -169,7 +175,7 @@ $loan_types_count_jnsa = (int) dashboard_scalar($conn, "SELECT COUNT(*) FROM loa
 					</div>
 				</div>
 
-				<!-- Table Container: Existing loan types list -->
+				<!-- loan types list -->
 				<div style="background:#ffffff; border:1px solid #e5e7eb; border-radius:12px; box-shadow:0 10px 30px rgba(15,23,42,0.08); padding:18px; overflow-x:auto;">
 					<table style="width:100%; border-collapse:collapse; min-width:760px;">
 						<thead>

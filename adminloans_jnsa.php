@@ -4,7 +4,38 @@ session_start();
 $username_jnsa = $_SESSION['username'] ?? 'admin01';
 $userRole_jnsa = $_SESSION['user_type'] ?? 'Admin';
 
-require_once 'Naval_FinalsActivity3_DB.php';
+// Ensure DB connection is available. Try a few likely paths and create a
+// fallback connection with sane defaults. This prevents "undefined $conn"
+// errors when the DB include was moved or renamed.
+$db_included = false;
+$db_candidates = [
+	__DIR__ . '/Naval_FinalsActivity3_DB.php',
+	__DIR__ . '/includes/Naval_FinalsActivity3_DB.php',
+	__DIR__ . '/db/Naval_FinalsActivity3_DB.php',
+	'Naval_FinalsActivity3_DB.php'
+];
+foreach ($db_candidates as $candidate) {
+	if (file_exists($candidate)) {
+		require_once $candidate;
+		$db_included = true;
+		break;
+	}
+}
+
+if (!isset($conn) || !($conn instanceof mysqli)) {
+	// Try to create a fallback connection. Adjust credentials if necessary.
+	$fallback_server = 'localhost';
+	$fallback_user = 'root';
+	$fallback_pass = '';
+	$fallback_db   = 'loan_management_jn';
+	$conn = @new mysqli($fallback_server, $fallback_user, $fallback_pass, $fallback_db);
+	if ($conn->connect_error) {
+		http_response_code(500);
+		echo "<h2>Database connection error</h2>\n";
+		echo "<p>Please check database configuration. Error: " . htmlspecialchars($conn->connect_error) . "</p>";
+		exit;
+	}
+}
 
 function dashboard_scalar_jnsa(mysqli $conn, string $sql, $default = 0) {
 	$result = $conn->query($sql);
