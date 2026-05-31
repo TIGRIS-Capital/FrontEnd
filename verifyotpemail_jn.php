@@ -6,18 +6,19 @@ use PHPMailer\PHPMailer\Exception;
 // Load Composer's autoloader
 require 'vendor/autoload.php';
 
+// Helper: send_verification() builds and sends OTP email using PHPMailer
+
 function send_verification($fullname, $email, $otp){
 
     $mail = new PHPMailer(true);
 
     try {
 
-        // Server settings
         $mail->isSMTP();
         $mail->Host       = 'smtp.gmail.com';
         $mail->SMTPAuth   = true;
-        $mail->Username   = 'jertzavryll.naval.cics@ust.edu.ph'; // Your UST Email
-        $mail->Password   = 'xjnk galc cimw olop';              // Your App Password
+        $mail->Username   = 'jertzavryll.naval.cics@ust.edu.ph';
+        $mail->Password   = 'xjnk galc cimw olop';              
         $mail->SMTPSecure = 'tls';
         $mail->Port       = 587;
 

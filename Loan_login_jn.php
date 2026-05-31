@@ -91,8 +91,8 @@ if (isset($_POST['sub_jnsa'])) {
     <div class="container-fluid" style="max-width:1200px;">
         <div class="row align-items-center justify-content-center">
             
-        <!-- Logo and Title Column -->
-                <div class="col-md-5 text-center mb-5 mb-md-0 d-flex flex-column align-items-center justify-content-center">
+        <!-- Left Column: Logo and Title -->
+            <div class="col-md-5 text-center mb-5 mb-md-0 d-flex flex-column align-items-center justify-content-center">
                 <div style="width:200px; height:200px; background-color:#121416; border-radius:28px; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 22px rgba(18,20,22,0.18); margin-bottom:24px; overflow:hidden;">
                     <img src="Tigris_Logo_NoText.png" alt="Tigris Capital Logo" style="width:100%; height:100%; object-fit:cover; border-radius:inherit;">
                 </div>
@@ -104,7 +104,7 @@ if (isset($_POST['sub_jnsa'])) {
                 </p>
             </div>
 
-        <!-- Form/Login Column     -->
+        <!-- Right Column: Login form card -->
             <div class="col-md-5 d-flex justify-content-center justify-content-md-start ps-md-5">
                 <div class="bg-white rounded-4 p-5 w-100" style="max-width:520px; box-shadow:0 18px 45px rgba(18,20,22,0.08); border:1px solid #e5e7eb;">
                     <form action="" method="post">

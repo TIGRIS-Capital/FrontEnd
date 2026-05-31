@@ -49,6 +49,7 @@ $underReviewPct = min(100, (int) round(($underReviewLoans / $totalLoans) * 100))
 </head>
 <body style="margin:0; background:#f4f6f9; color:#1f2937; font-family: Arial, Helvetica, sans-serif; overflow-x:hidden;">
     <div style="min-height:100vh; display:flex; background:#f4f5f7;">
+        <!-- Sidebar: Employee navigation (Overview / Loans / Payments / Loan Types) -->
         <aside style="width:240px; background:#121416; border-right:1px solid rgba(226,232,240,0.08); box-shadow: 0 0 0 1px rgba(0,0,0,0.08); display:flex; flex-direction:column; justify-content:space-between;">
             <div>
                     <div style="height:69px; display:flex; align-items:center; gap:12px; padding:0 18px; border-bottom:1px solid rgba(226,232,240,0.08);">
@@ -78,6 +79,7 @@ $underReviewPct = min(100, (int) round(($underReviewLoans / $totalLoans) * 100))
         </aside>
 
         <main style="flex:1; min-width:0; display:flex; flex-direction:column;">
+            <!-- Header: Top bar with title and employee info -->
             <header style="height:69px; background:#121416; border-bottom:1px solid rgba(226,232,240,0.08); display:flex; align-items:center; justify-content:space-between; padding:0 18px 0 20px;">
 				<div>
 					<div style="font-size:19px; font-weight:600; color:#ffffff; letter-spacing:-0.2px;">Loan Management System - Employee Panel</div>
@@ -97,6 +99,7 @@ $underReviewPct = min(100, (int) round(($underReviewLoans / $totalLoans) * 100))
 				</div>
 			</header>
 
+            <!-- Main Section: Dashboard title, KPI cards, quick actions, and activity panels -->
             <section style="padding:28px 18px 18px 18px; background:#f4f6f9; flex:1;">
                 <div style="margin-bottom:18px;">
                     <div style="font-size:26px; font-weight:600; color:#1f2937; letter-spacing:-0.2px; margin-bottom:9px;">Employee Dashboard</div>

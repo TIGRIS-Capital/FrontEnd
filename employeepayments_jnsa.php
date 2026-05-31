@@ -93,6 +93,7 @@ $latest_payment_date_jnsa = dashboard_scalar($conn, "SELECT MAX(payment_date_jns
 </head>
 <body style="margin:0; background:#f4f6f9; color:#212529; font-family: Arial, Helvetica, sans-serif; overflow-x:hidden;">
 	<div style="min-height:100vh; display:flex; background:#f4f6f9;">
+		<!-- Sidebar: Employee navigation (Overview / Loans / Payments / Loan Types) -->
 		<aside style="width:240px; background:#121416; border-right:1px solid rgba(226,232,240,0.08); box-shadow:0 0 0 1px rgba(0,0,0,0.08); display:flex; flex-direction:column; justify-content:space-between;">
 			<div>
 				<div style="height:69px; display:flex; align-items:center; gap:12px; padding:0 18px; border-bottom:1px solid rgba(226,232,240,0.08);">
@@ -119,6 +120,7 @@ $latest_payment_date_jnsa = dashboard_scalar($conn, "SELECT MAX(payment_date_jns
 		</aside>
 
 		<main style="flex:1; min-width:0; display:flex; flex-direction:column;">
+			<!-- Header: Top bar with title and employee info -->
 			<header style="height:69px; background:#121416; border-bottom:1px solid rgba(226,232,240,0.08); display:flex; align-items:center; justify-content:space-between; padding:0 18px 0 20px;">
 				<div>
 					<div style="font-size:19px; font-weight:600; color:#ffffff; letter-spacing:-0.2px;">Loan Management System - Employee Panel</div>
@@ -138,12 +140,14 @@ $latest_payment_date_jnsa = dashboard_scalar($conn, "SELECT MAX(payment_date_jns
 				</div>
 			</header>
 
+			<!-- Main Section: Page title, description, KPI cards, search and payments table -->
 			<section style="padding:28px 18px 18px 18px; background:#f4f6f9; flex:1;">
 				<div style="margin-bottom:18px;">
 					<div style="font-size:26px; font-weight:600; color:#212529; letter-spacing:-0.2px; margin-bottom:9px;">Payment History</div>
 					<div style="font-size:14px; color:#495057;">Track every posted payment across all member loans.</div>
 				</div>
 
+				<!-- Helper: Sorting helper for payments table -->
 				<?php
 				function sort_link_payments($key) {
 					$params = $_GET;
@@ -157,6 +161,7 @@ $latest_payment_date_jnsa = dashboard_scalar($conn, "SELECT MAX(payment_date_jns
 				}
 				?>
 
+				<!-- KPI Cards: Total Payments / Total Amount Collected / Latest Payment Date -->
 				<div class="row gx-4 gy-4" style="margin:0 0 24px 0;">
 					<div class="col-12 col-md-4 px-2">
 						<div style="height:110px; background:#ffffff; border:1px solid #e5e7eb; border-radius:10px; box-shadow:0 2px 10px rgba(15,23,42,0.06); padding:14px 16px; display:flex; justify-content:space-between; align-items:flex-start;">
@@ -189,6 +194,7 @@ $latest_payment_date_jnsa = dashboard_scalar($conn, "SELECT MAX(payment_date_jns
 					</div>
 				</div>
 
+				<!-- Search Form: filter by member, payment ID or loan ID -->
 				<!-- Search form placed below cards and above the table -->
 				<form method="get" style="display:flex; gap:8px; align-items:center; margin:0 0 16px 0;">
 					<input type="text" name="q" value="<?php echo htmlspecialchars($q); ?>" placeholder="Search member name, payment ID or loan ID" style="padding:8px 10px; border:1px solid #e5e7eb; border-radius:6px; min-width:280px;">
@@ -196,6 +202,7 @@ $latest_payment_date_jnsa = dashboard_scalar($conn, "SELECT MAX(payment_date_jns
 					<a href="employeepayments_jnsa.php" style="padding:8px 12px; border-radius:6px; border:1px solid #e5e7eb; color:#374151; text-decoration:none;">Clear</a>
 				</form>
 
+				<!-- Table Container: Payments list with sortable headers -->
 				<div style="background:#ffffff; border:1px solid #e5e7eb; border-radius:12px; box-shadow:0 10px 30px rgba(15,23,42,0.08); padding:18px; overflow-x:auto;">
 					<table style="width:100%; border-collapse:collapse; min-width:900px;">
 						<thead>

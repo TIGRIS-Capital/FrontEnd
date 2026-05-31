@@ -107,6 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body style="margin:0; background:#f4f6f9; color:#212529; font-family: Arial, Helvetica, sans-serif; overflow-x:hidden;">
 	<div style="min-height:100vh; display:flex; background:#f4f6f9;">
+		<!-- Sidebar: Member navigation (Dashboard / Apply / Status / Payment) -->
 		<aside style="width:240px; background:#121416; border-right:1px solid rgba(226,232,240,0.08); box-shadow:0 0 0 1px rgba(0,0,0,0.08); display:flex; flex-direction:column; justify-content:space-between;">
 			<div>
 				<div style="height:69px; display:flex; align-items:center; gap:12px; padding:0 18px; border-bottom:1px solid rgba(226,232,240,0.08);">
@@ -133,6 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		</aside>
 
 		<main style="flex:1; min-width:0; display:flex; flex-direction:column;">
+			<!-- Header: Top bar with title and member info -->
 			<header style="height:69px; background:#121416; border-bottom:1px solid rgba(226,232,240,0.08); display:flex; align-items:center; justify-content:space-between; padding:0 18px 0 20px;">
 				<div>
 					<div style="font-size:19px; font-weight:600; color:#ffffff; letter-spacing:-0.2px;">Loan Management System - Member</div>
@@ -152,6 +154,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 				</div>
 			</header>
 
+			<!-- Main Section: Payment form and messages -->
 			<section style="padding:28px 18px 18px 18px; background:#f4f6f9; flex:1;">
 				<div style="margin-bottom:18px;">
 					<div style="font-size:26px; font-weight:600; color:#212529; letter-spacing:-0.2px; margin-bottom:9px;">Make a Payment</div>
@@ -164,6 +167,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 					</div>
 				<?php endif; ?>
 
+				<!-- Form Card: Select active loan and submit payment -->
 				<div style="max-width:760px;">
 					<form method="post" action="memberpayment_jnsa.php" style="background:#ffffff; border:1px solid #e5e7eb; border-radius:12px; box-shadow:0 10px 30px rgba(15,23,42,0.08); padding:22px;">
 						<div class="row g-3">
@@ -180,12 +184,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 							<div class="col-12 col-md-6">
 								<label for="payment_amount_jnsa" style="display:block; margin-bottom:8px; color:#212529; font-size:13px; font-weight:700;">Payment Amount</label>
 								<input type="number" step="0.01" min="0" id="payment_amount_jnsa" name="payment_amount_jnsa" value="<?php echo htmlspecialchars((string)$selected_payment_amount_jnsa); ?>" style="width:100%; height:44px; border-radius:8px; background:#ffffff; color:#212529; border:1px solid #d1d5db; padding:0 12px; outline:none;">
-							</div>
-
-							<div class="col-12">
-								<div style="padding:14px 16px; border-radius:8px; background:#f8f9fa; border:1px solid #e5e7eb; color:#495057; font-size:13px; line-height:1.6;">
-									Payments are posted in a single database transaction. The loan balance and system log are updated together.
-								</div>
 							</div>
 
 							<div class="col-12" style="padding-top:4px;">

@@ -67,6 +67,7 @@ if ($loan_rows_query_jnsa && $loan_rows_query_jnsa->num_rows > 0) {
 </head>
 <body style="margin:0; background:#f4f6f9; color:#212529; font-family: Arial, Helvetica, sans-serif; overflow-x:hidden;">
     <div style="min-height:100vh; display:flex; background:#f4f6f9;">
+        <!-- Sidebar: Member navigation (Dashboard / Apply / Status / Payment) -->
         <aside style="width:240px; background:#121416; border-right:1px solid rgba(226,232,240,0.08); box-shadow: 0 0 0 1px rgba(0,0,0,0.08); display:flex; flex-direction:column; justify-content:space-between;">
             <div>
                 <div style="height:69px; display:flex; align-items:center; gap:12px; padding:0 18px; border-bottom:1px solid rgba(226,232,240,0.08);">
@@ -93,6 +94,7 @@ if ($loan_rows_query_jnsa && $loan_rows_query_jnsa->num_rows > 0) {
         </aside>
 
         <main style="flex:1; min-width:0; display:flex; flex-direction:column;">
+            <!-- Header: Top bar with title and member info -->
             <header style="height:69px; background:#121416; border-bottom:1px solid rgba(226,232,240,0.08); display:flex; align-items:center; justify-content:space-between; padding:0 18px 0 20px;">
                 <div>
                     <div style="font-size:19px; font-weight:600; color:#ffffff; letter-spacing:-0.2px;">Loan Management System - Member</div>
@@ -112,12 +114,14 @@ if ($loan_rows_query_jnsa && $loan_rows_query_jnsa->num_rows > 0) {
                 </div>
             </header>
 
+            <!-- Main Section: Dashboard title, KPI cards, next-due and loan summary -->
             <section style="padding:28px 18px 18px 18px; background:#f4f6f9; flex:1;">
                 <div style="margin-bottom:18px;">
                     <div style="font-size:26px; font-weight:600; color:#212529; letter-spacing:-0.2px; margin-bottom:9px;">Member Dashboard</div>
                     <div style="font-size:14px; color:#495057;">Welcome back, <?php echo htmlspecialchars($member_name_jnsa); ?>.</div>
                 </div>
 
+                <!-- KPI Cards: My Loans / Active / Outstanding / Recent Payment -->
                 <div class="row gx-4 gy-4" style="margin:0 0 24px 0;">
                     <div class="col-12 col-md-6 col-xl-3 px-2">
                         <div style="height:110px; background:#ffffff; border:1px solid #e5e7eb; border-radius:10px; box-shadow:0 2px 10px rgba(15,23,42,0.06); padding:14px 16px; display:flex; justify-content:space-between; align-items:flex-start;">
@@ -173,6 +177,7 @@ if ($loan_rows_query_jnsa && $loan_rows_query_jnsa->num_rows > 0) {
                     </div>
                 </div>
 
+                <!-- Panels: Next Due Date and My Loan Summary table -->
                 <div class="row g-3" style="margin:24px 0 0 0;">
                     <div class="col-md-6" style="padding-left:8px; padding-right:8px;">
                         <div style="background:#ffffff; border:1px solid #e5e7eb; border-radius:6px; box-shadow:0 1px 4px rgba(16,24,40,.04); min-height:220px; padding:16px;">

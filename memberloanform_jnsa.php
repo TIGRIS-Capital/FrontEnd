@@ -148,6 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body style="margin:0; background:#f4f6f9; color:#212529; font-family: Arial, Helvetica, sans-serif; overflow-x:hidden;">
 	<div style="min-height:100vh; display:flex; background:#f4f6f9;">
+		<!-- Sidebar: Member navigation (Dashboard / Apply / Status / Payment) -->
 		<aside style="width:240px; background:#121416; border-right:1px solid rgba(226,232,240,0.08); box-shadow:0 0 0 1px rgba(0,0,0,0.08); display:flex; flex-direction:column; justify-content:space-between;">
 			<div>
 				<div style="height:69px; display:flex; align-items:center; gap:12px; padding:0 18px; border-bottom:1px solid rgba(226,232,240,0.08);">
@@ -174,6 +175,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		</aside>
 
 		<main style="flex:1; min-width:0; display:flex; flex-direction:column;">
+			<!-- Header: Top bar with title and member info -->
 			<header style="height:69px; background:#121416; border-bottom:1px solid rgba(226,232,240,0.08); display:flex; align-items:center; justify-content:space-between; padding:0 18px 0 20px;">
 				<div>
 					<div style="font-size:19px; font-weight:600; color:#ffffff; letter-spacing:-0.2px;">Loan Management System - Member</div>
@@ -193,6 +195,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 				</div>
 			</header>
 
+			<!-- Main Section: Loan application form with validations and messages -->
 			<section style="padding:28px 18px 18px 18px; background:#f4f6f9; flex:1;">
 				<div style="margin-bottom:18px;">
 					<div style="font-size:26px; font-weight:600; color:#212529; letter-spacing:-0.2px; margin-bottom:9px;">Apply for a Loan</div>
@@ -205,6 +208,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 					</div>
 				<?php endif; ?>
 
+				<!-- Form Card: Loan application form -->
 				<div style="max-width:760px;">
 					<form method="post" action="memberloanform_jnsa.php" style="background:#ffffff; border:1px solid #e5e7eb; border-radius:12px; box-shadow:0 10px 30px rgba(15,23,42,0.08); padding:22px;">
 						<div class="row g-3">
